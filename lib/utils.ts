@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export const generatePagination = (currentPage: number, totalPages: number) => {
+export function generatePagination(currentPage: number, totalPages: number) {
 	if (totalPages <= 7) {
 		return Array.from({ length: totalPages }, (_, i) => i + 1);
 	}
@@ -19,4 +19,10 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 	}
 
 	return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
-};
+}
+
+export function resolveAvatarSrc(value?: string | null) {
+	if (!value) return "";
+	if (value.startsWith("http") || value.startsWith("/")) return value;
+	return `/${value}`;
+}

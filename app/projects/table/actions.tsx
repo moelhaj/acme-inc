@@ -22,8 +22,9 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import useApp from "@/hooks/use-app";
 import { MoreHorizontal, Pin, PinOff, Settings2, Trash2 } from "lucide-react";
-import Link from "next/link";
 import { Fragment, useState } from "react";
+import { UpdateProject } from "../[id]/components/update-project";
+import { Project } from "@/lib/definitions";
 
 export function DeleteProject({ id }: { id: string }) {
 	const { unpinProject, isProjectPinned } = useApp();
@@ -47,30 +48,31 @@ export function DeleteProject({ id }: { id: string }) {
 	);
 }
 
-export function Actions({ id, title }: { id: string; title: string }) {
+export function Actions({ project }: { project: Project }) {
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
+	const [openUpdateSheet, setOpenUpdateSheet] = useState(false);
 	const { pinnedProjects, pinProject, unpinProject, isProjectPinned } = useApp();
 	const [inputValue, setInputValue] = useState<string>("");
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const pinned = isProjectPinned(id);
+	const pinned = isProjectPinned(project.id);
 
 	function handlePinToggle() {
 		if (pinned) {
-			unpinProject(id);
+			unpinProject(project.id);
 			return;
 		}
 		pinProject({
-			id,
-			title,
-			url: `/projects/${id}`,
+			id: project.id,
+			title: project.title,
+			url: `/projects/${project.id}`,
 			order: pinnedProjects.length + 1,
 		});
 	}
 
 	async function handleSubmit() {
 		setIsLoading(true);
-		unpinProject(id);
-		await deleteProject(id);
+		unpinProject(project.id);
+		await deleteProject(project.id);
 		setIsLoading(false);
 		setOpenDeleteModal(false);
 	}
@@ -93,11 +95,9 @@ export function Actions({ id, title }: { id: string; title: string }) {
 						{pinned ? <PinOff /> : <Pin />}
 						{pinned ? "Unpin" : "Pin"}
 					</DropdownMenuItem>
-					<DropdownMenuItem asChild>
-						<Link href={`/projects/update/${id}`}>
-							<Settings2 />
-							Edit
-						</Link>
+					<DropdownMenuItem onClick={() => setOpenUpdateSheet(true)}>
+						<Settings2 />
+						Edit
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem
@@ -125,11 +125,13 @@ export function Actions({ id, title }: { id: string; title: string }) {
 					</div>
 
 					<div className="space-y-5">
-						<input type="hidden" name="projectId" value={id} />
+						<input type="hidden" name="projectId" value={project.id} />
 						<div className="*:not-first:mt-2">
-							<Label htmlFor={id}>{`Type "${title}" to confirm`}</Label>
+							<Label
+								htmlFor={project.id}
+							>{`Type "${project.title}" to confirm`}</Label>
 							<Input
-								id={id}
+								id={project.id}
 								type="text"
 								value={inputValue}
 								onChange={e => setInputValue(e.target.value)}
@@ -145,7 +147,7 @@ export function Actions({ id, title }: { id: string; title: string }) {
 								type="button"
 								className="flex-1"
 								variant="destructive"
-								disabled={inputValue !== title || isLoading}
+								disabled={inputValue !== project.title || isLoading}
 								onClick={handleSubmit}
 							>
 								{isLoading ? <Spinner className="mr-2" /> : "Delete"}
@@ -154,6 +156,7 @@ export function Actions({ id, title }: { id: string; title: string }) {
 					</div>
 				</DialogContent>
 			</Dialog>
+			<UpdateProject open={openUpdateSheet} setOpen={setOpenUpdateSheet} project={project} />
 		</Fragment>
 	);
 }

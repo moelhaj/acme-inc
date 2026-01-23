@@ -1,10 +1,9 @@
 "use client";
-import { AlignStartHorizontal, FolderTree, LayoutGrid, SquaresExclude } from "lucide-react";
+import { FolderTree, LayoutGrid, SquaresExclude } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
 import {
 	Sidebar,
 	SidebarContent,
@@ -12,6 +11,8 @@ import {
 	SidebarHeader,
 	SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import { NavUser } from "./nav-user";
+import { User } from "@/lib/definitions";
 
 const data = {
 	user: {
@@ -30,15 +31,13 @@ const data = {
 			url: "/projects",
 			icon: FolderTree,
 		},
-		{
-			title: "Tasks",
-			url: "/tasks",
-			icon: AlignStartHorizontal,
-		},
 	],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+	user,
+	...props
+}: React.ComponentProps<typeof Sidebar> & { user: User | null }) {
 	return (
 		<Sidebar collapsible="icon" variant="floating" {...props}>
 			<SidebarHeader>
@@ -60,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<NavProjects />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavUser />
+				{user && <NavUser user={user} />}
 			</SidebarFooter>
 		</Sidebar>
 	);

@@ -15,6 +15,7 @@ import { Bot, SquaresExclude } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sparkles } from "lucide-react";
 import { AiButton } from "@/components/ui/ai-button";
+import SiriOrb from "./ui/siri-orb";
 
 export function Header() {
 	const pathname = usePathname();
@@ -33,22 +34,12 @@ export function Header() {
 		);
 	});
 	return (
-		<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
-			<div className="flex items-center gap-2 px-4 w-full">
+		<header className="flex py-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
+			<div className="flex items-center gap-2 pr-4 pl-2 w-full">
 				<SidebarTrigger className="-ml-1" />
 				<div className="flex-1 flex md:hidden" />
-				<Separator
-					orientation="vertical"
-					className="hidden md:flex mr-2 data-[orientation=vertical]:h-4"
-				/>
 				<Breadcrumb className="hidden md:flex">
 					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink asChild>
-								<Link href="/">Home</Link>
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-						{pathSegments.length > 0 && <BreadcrumbSeparator />}
 						{breadcrumbItems.map((item, index) => (
 							<React.Fragment key={`breadcrumb-${index}`}>
 								{item}
@@ -58,10 +49,12 @@ export function Header() {
 					</BreadcrumbList>
 				</Breadcrumb>
 				<div className="flex-1 md:flex hidden" />
-				<AiButton onClick={() => console.log("AI Assist")}>
+				{/* <AiButton onClick={() => console.log("AI Assist")}>
 					<Sparkles className="h-4 w-4 text-cyan-400" />
-					AI Assist
-				</AiButton>
+				</AiButton> */}
+				<button className="cursor-pointer p-4 rounded-full w-7 h-7 grid place-content-center">
+					<SiriOrb size="30px" />
+				</button>
 			</div>
 		</header>
 	);

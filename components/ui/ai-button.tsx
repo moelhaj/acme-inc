@@ -11,17 +11,17 @@ export function AiButton({ children, onClick, className }: AiButtonProps) {
 		<button
 			onClick={onClick}
 			className={cn(
-				"relative inline-flex items-center justify-center rounded-xl p-[2px]",
+				"relative inline-flex items-center justify-center rounded-full p-[2px]",
 				"bg-[length:300%_300%] bg-gradient-to-r from-fuchsia-500 via-cyan-400 to-violet-500",
 				"animate-[gradient-border_4s_ease_infinite]",
 				"hover:scale-[1.02] transition-transform",
-				className
+				className,
 			)}
 		>
 			{/* Glow */}
 			<span
 				aria-hidden
-				className="absolute inset-0 rounded-xl blur-md opacity-60
+				className="absolute inset-0 rounded-full blur-md opacity-60
                    bg-gradient-to-r from-fuchsia-500 via-cyan-400 to-violet-500"
 			/>
 

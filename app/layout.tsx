@@ -1,15 +1,19 @@
 import { AppProvider } from "@/hooks/use-app";
 import { Header } from "@/components/header";
-import { AppSidebar } from "@/components/app-sidebar";
+import AppSidebarWrapper from "@/components/app-sidebar-wrapper";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const poppins = Poppins({
+	subsets: ["latin"],
+	weight: ["400", "700"],
+	variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
 	title: {
@@ -42,14 +46,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html className={inter.className} lang="en" suppressHydrationWarning>
+		<html className={poppins.className} lang="en" suppressHydrationWarning>
 			<body className="antialiased text-sm" suppressHydrationWarning>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<TooltipProvider delayDuration={0}>
 						<AppProvider>
 							<SidebarProvider>
-								<AppSidebar />
-								<SidebarInset>
+								<AppSidebarWrapper />
+								<SidebarInset className="overflow-hidden">
 									<Header />
 									{children}
 								</SidebarInset>

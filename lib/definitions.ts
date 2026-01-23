@@ -23,6 +23,9 @@ export type Project = {
 export type Issue = {
 	id: string;
 	project_id: string;
+	user_id: string;
+	user_name?: string | null;
+	user_avatar?: string | null;
 	title: string;
 	description: string;
 	type: "bug" | "feature" | "improvement";
@@ -32,6 +35,21 @@ export type Issue = {
 	created_at: string;
 	updated_at: string;
 };
+
+export const IssueType = [
+	{
+		value: "bug",
+		label: "Bug",
+	},
+	{
+		value: "feature",
+		label: "Feature",
+	},
+	{
+		value: "improvement",
+		label: "Improvement",
+	},
+];
 
 export const Statuses = [
 	{

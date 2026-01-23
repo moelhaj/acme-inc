@@ -1,14 +1,12 @@
 "use client";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
-import { CircleXIcon, LoaderCircleIcon, Plus, Search as SearchIcon } from "lucide-react";
-import { CreateProject } from "../components/buttons";
-import { useState, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Statuses, Priorities } from "@/lib/definitions";
+import { Priorities, Statuses } from "@/lib/definitions";
+import { CircleXIcon, LoaderCircleIcon, Search as SearchIcon } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import { CreateProject } from "../[id]/components/create-project";
 import { FacetedFilter } from "./filter";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function Toolbar() {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -95,12 +93,7 @@ export default function Toolbar() {
 				<FacetedFilter options={Statuses} label="Status" />
 				<FacetedFilter options={Priorities} label="Priority" />
 				<div className="flex-1 hidden lg:flex" />
-				<Button asChild size="sm">
-					<Link href="/projects/create">
-						<Plus />
-						<span className="hidden md:block">Add project</span>
-					</Link>
-				</Button>
+				<CreateProject />
 			</div>
 		</div>
 	);

@@ -16,13 +16,13 @@ export default async function Projects(props: {
 	const searchParams = await props.searchParams;
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
-	const itemsPerPage = Number(searchParams?.items) || 6;
+	const itemsPerPage = Number(searchParams?.items) || 10;
 	const status = searchParams?.status || "";
 	const priority = searchParams?.priority || "";
 	const totalPages = await fetchProjectsPages(query, itemsPerPage, status, priority);
 
 	return (
-		<div className="p-4 w-full flex flex-col gap-4 overflow-x-hidden">
+		<div className="p-4 pl-2 w-full flex flex-col gap-4 overflow-x-hidden">
 			<Toolbar />
 			<Suspense
 				key={query + currentPage + itemsPerPage}

@@ -1,9 +1,8 @@
 "use server";
 
-import { z } from "zod";
-import postgres from "postgres";
-import { revalidatePath } from "next/cache";
 import { Project } from "@/lib/definitions";
+import { revalidatePath } from "next/cache";
+import postgres from "postgres";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -17,23 +16,6 @@ export type State = {
 	message?: string | null;
 };
 
-const FormSchema = z.object({
-	id: z.string(),
-	title: z.string().min(1, "Title is required"),
-	description: z.string().min(1, "Description is required"),
-	status: z.enum(["todo", "in_progress", "in_review", "done"], {
-		message: "Status is required",
-	}),
-	priority: z.enum(["low", "medium", "high", "urgent"], {
-		message: "Priority is required",
-	}),
-	created_at: z.string().optional(),
-	updated_at: z.string().optional(),
-});
-
-const CreateProject = FormSchema.omit({ id: true, created_at: true, updated_at: true });
-const UpdateProject = FormSchema.omit({ id: true, created_at: true, updated_at: true });
-
 const parseListParam = (value: string) =>
 	value
 		.split(",")
@@ -45,7 +27,7 @@ const buildProjectFilters = (query: string, status: string, priority: string) =>
 
 	if (query) {
 		filters.push(
-			sql`(projects.title ILIKE ${`%${query}%`} OR projects.description ILIKE ${`%${query}%`})`
+			sql`(projects.title ILIKE ${`%${query}%`} OR projects.description ILIKE ${`%${query}%`})`,
 		);
 	}
 
@@ -64,7 +46,7 @@ const buildProjectFilters = (query: string, status: string, priority: string) =>
 	}
 
 	return sql`WHERE ${filters.reduce((acc, filter, i) =>
-		i === 0 ? filter : sql`${acc} AND ${filter}`
+		i === 0 ? filter : sql`${acc} AND ${filter}`,
 	)}`;
 };
 
@@ -72,7 +54,7 @@ export async function fetchProjectsPages(
 	query: string,
 	itemsPerPage: number,
 	status: string,
-	priority: string
+	priority: string,
 ) {
 	try {
 		const whereClause = buildProjectFilters(query, status, priority);
@@ -94,7 +76,7 @@ export async function fetchFilteredProjects(
 	currentPage: number,
 	itemsPerPage = 10,
 	status: string,
-	priority: string
+	priority: string,
 ) {
 	const offset = (currentPage - 1) * itemsPerPage;
 
@@ -137,71 +119,41 @@ export async function fetchProjectById(id: string) {
 	}
 }
 
-export async function createProject(prevState: State, formData: FormData) {
-	const validatedFields = CreateProject.safeParse({
-		title: formData.get("title"),
-		description: formData.get("description"),
-		status: formData.get("status"),
-		priority: formData.get("priority"),
-	});
-
-	if (!validatedFields.success) {
-		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-			message: "Missing fields. Failed to create project.",
-		};
-	}
-
-	const { title, description, status, priority } = validatedFields.data;
-
+export async function createProject(data: Omit<Project, "id" | "created_at" | "updated_at">) {
+	const { title, description, status, priority } = data;
 	try {
 		await sql`
-      INSERT INTO projects (title, description, status, priority)
-      VALUES (${title}, ${description}, ${status}, ${priority})
-    `;
+            INSERT INTO projects (title, description, status, priority)
+            VALUES (${title}, ${description}, ${status}, ${priority})
+        `;
 	} catch (error) {
 		return {
 			message: "Database error: Failed to create project.",
+			error,
 		};
 	}
-
 	revalidatePath("/projects");
-	redirect("/projects");
 }
 
-export async function updateProject(id: string, prevState: State, formData: FormData) {
-	const validatedFields = UpdateProject.safeParse({
-		title: formData.get("title"),
-		description: formData.get("description"),
-		status: formData.get("status"),
-		priority: formData.get("priority"),
-	});
-
-	if (!validatedFields.success) {
-		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-			message: "Missing fields. Failed to update project.",
-		};
-	}
-
-	const { title, description, status, priority } = validatedFields.data;
-
+export async function updateProject(
+	id: string,
+	data: Omit<Project, "id" | "created_at" | "updated_at">,
+) {
+	const { title, description, status, priority } = data;
 	try {
 		await sql`
-      UPDATE projects
-      SET title = ${title},
-          description = ${description},
-          status = ${status},
-          priority = ${priority},
-          updated_at = NOW()
-      WHERE id = ${id}
-    `;
+            UPDATE projects
+            SET title = ${title},
+            description = ${description},
+            status = ${status},
+            priority = ${priority},
+            updated_at = NOW()
+            WHERE id = ${id}
+        `;
 	} catch (error) {
 		return { message: "Database error: Failed to update project.", error };
 	}
-
 	revalidatePath("/projects");
-	return { success: true };
 }
 
 export async function deleteProject(id: string) {

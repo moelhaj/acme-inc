@@ -1,5 +1,5 @@
 "use client";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 type PinnedProject = {
 	id: string;
@@ -9,8 +9,6 @@ type PinnedProject = {
 };
 
 type AppContextType = {
-	isSettingOpen: boolean;
-	setIsSettingOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	pinnedProjects: PinnedProject[];
 	pinProject: (project: PinnedProject) => void;
 	unpinProject: (projectId: string) => void;
@@ -21,15 +19,16 @@ const STORAGE_KEY = "acme:pinned-projects";
 export const AppContext = createContext<AppContextType | null>(null);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-	const [isSettingOpen, setIsSettingOpen] = useState(false);
-	const [pinnedProjects, setPinnedProjects] = useState<PinnedProject[]>(() => {
+	const [pinnedProjects, setPinnedProjects] = useState<PinnedProject[]>([]);
+
+	useEffect(() => {
 		try {
 			const stored = localStorage.getItem(STORAGE_KEY);
-			return stored ? JSON.parse(stored) : [];
+			setPinnedProjects(stored ? JSON.parse(stored) : []);
 		} catch {
-			return [];
+			setPinnedProjects([]);
 		}
-	});
+	}, []);
 
 	function pinProject(project: PinnedProject) {
 		setPinnedProjects(prev => {
@@ -62,8 +61,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 	return (
 		<AppContext.Provider
 			value={{
-				isSettingOpen,
-				setIsSettingOpen,
 				pinnedProjects,
 				pinProject,
 				unpinProject,
