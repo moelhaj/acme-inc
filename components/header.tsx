@@ -36,7 +36,7 @@ export function Header() {
 	return (
 		<header className="flex py-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
 			<div className="flex items-center gap-2 pr-4 pl-2 w-full">
-				<SidebarTrigger className="-ml-1" />
+				<SidebarTrigger className="ml-2 md:-ml-1" />
 				<div className="flex-1 flex md:hidden" />
 				<Breadcrumb className="hidden md:flex">
 					<BreadcrumbList>
