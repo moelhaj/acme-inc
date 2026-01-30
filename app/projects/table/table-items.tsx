@@ -1,4 +1,4 @@
-import { Statuses, Priorities } from "@/lib/definitions";
+import { Statuses, Priorities, Types } from "@/lib/definitions";
 
 export function Status({ status }: { status: string }) {
 	const statusInfo = Statuses.find(s => s.value === status);
@@ -19,4 +19,9 @@ export function Priority({ priority }: { priority: string }) {
 		);
 	}
 	return <span>{priorityInfo ? priorityInfo.label : priority}</span>;
+}
+
+export function IssueType({ issueType }: { issueType: string }) {
+	const typeInfo = Types.find(t => t.value === issueType);
+	return <span>{typeInfo ? typeInfo.label : issueType}</span>;
 }

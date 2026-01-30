@@ -1,6 +1,7 @@
 "use client";
 import { updateIssuePositions } from "@/actions/issues";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
 	KanbanBoard,
 	KanbanCard,
@@ -13,8 +14,13 @@ import { Issue, Priorities, Statuses, Types } from "@/lib/definitions";
 import { Activity, Fragment, useEffect, useRef, useState, useTransition } from "react";
 import { CreateIssue } from "./create-issue";
 import { Filter } from "./filter-issue";
+import IssuesTable from "./issues-table";
 import { UpdateIssue } from "./update-issue";
 import IssueCard from "./issue-card";
+import { LayoutGrid, SquareKanban, Table2 } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import KanbanToolbar from "./kanban-toolbar";
 
 const COLUMNS = [
 	{ id: "todo", name: "Todo", color: "#F43F5E" },
@@ -117,6 +123,7 @@ export default function KanbanBoardView({
 }) {
 	const [openUpdateSheet, setOpenUpdateSheet] = useState(false);
 	const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+	const [view, setView] = useState<"board" | "table">("board");
 
 	const [items, setItems] = useState<KanbanIssue[]>(() => buildItems(issues));
 	const [, startTransition] = useTransition();
@@ -132,6 +139,15 @@ export default function KanbanBoardView({
 	}, [items]);
 
 	const columns: Column[] = [...COLUMNS];
+
+	const handleEditIssue = (issue: Issue) => {
+		setSelectedIssue(issue);
+		setOpenUpdateSheet(true);
+	};
+
+	const handleDeleteIssue = (issueId: string) => {
+		setItems(prev => prev.filter(item => item.id !== issueId));
+	};
 
 	function handleDragEnd(event: DragEndEvent) {
 		if (!event.over) return;
@@ -194,68 +210,80 @@ export default function KanbanBoardView({
 
 	return (
 		<Fragment>
-			<div className=" lg:hidden w-full h-full py-20 grid place-content-center">
-				Kanban view is available on larger screens only.
+			<KanbanToolbar projectId={projectId} view={view} setView={setView} />
+			<div className="lg:hidden w-full h-full p-4">
+				<IssuesTable
+					issues={items}
+					onEdit={handleEditIssue}
+					onDeleted={handleDeleteIssue}
+				/>
 			</div>
 			<div className="hidden lg:block">
-				<header className="flex items-center justify-between px-4 pt-4">
-					<div className="flex items-center gap-2">
-						<Filter options={Statuses} label="Status" />
-						<Filter options={Priorities} label="Priority" />
-						<Filter options={Types} label="Type" />
+				{view === "table" ? (
+					<div className="p-4">
+						<IssuesTable
+							issues={items}
+							onEdit={handleEditIssue}
+							onDeleted={handleDeleteIssue}
+						/>
 					</div>
-					<CreateIssue projectId={projectId} />
-				</header>
-
-				<Activity mode={issues.length === 0 ? "visible" : "hidden"}>
-					<div className="flex items-center justify-center h-[calc(100vh-11rem)]">
-						<p className="text-sm text-muted-foreground">No issues found.</p>
-					</div>
-				</Activity>
-				<Activity mode={issues.length > 0 ? "visible" : "hidden"}>
-					<KanbanProvider
-						columns={columns}
-						data={items}
-						onDataChange={handleDataChange}
-						onDragEnd={handleDragEnd}
-						className="p-4 h-[calc(100vh-8rem)] overflow-hidden"
-					>
-						{(column: Column) => (
-							<KanbanBoard
-								id={column.id}
-								key={column.id}
-								className="bg-muted/50 p-2 rounded-lg shadow-none border-none"
+				) : (
+					<Fragment>
+						<Activity mode={issues.length === 0 ? "visible" : "hidden"}>
+							<div className="flex items-center justify-center h-[calc(100vh-11rem)]">
+								<p className="text-sm text-muted-foreground">No issues found.</p>
+							</div>
+						</Activity>
+						<Activity mode={issues.length > 0 ? "visible" : "hidden"}>
+							<KanbanProvider
+								columns={columns}
+								data={items}
+								onDataChange={handleDataChange}
+								onDragEnd={handleDragEnd}
+								className="p-4 h-[calc(100vh-8rem)] overflow-hidden"
 							>
-								<KanbanHeader className="px-4 border rounded-lg bg-background">
-									<div className="flex items-center justify-between gap-2">
-										<div className="flex items-center gap-2">
-											<div
-												className="h-2 w-2 rounded-full"
-												style={{ backgroundColor: column.color }}
-											/>
-											<span>{column.name}</span>
-										</div>
-										<span className="text-muted-foreground">
-											{items.filter(item => item.column === column.id).length}
-										</span>
-									</div>
-								</KanbanHeader>
-								<KanbanCards id={column.id}>
-									{(issue: KanbanIssue) => (
-										<KanbanCard
-											column={column.id}
-											id={issue.id}
-											key={issue.id}
-											name={issue.title}
-										>
-											<IssueCard issue={issue} />
-										</KanbanCard>
-									)}
-								</KanbanCards>
-							</KanbanBoard>
-						)}
-					</KanbanProvider>
-				</Activity>
+								{(column: Column) => (
+									<KanbanBoard
+										id={column.id}
+										key={column.id}
+										className="bg-muted/50 p-2 rounded-lg shadow-none border-none"
+									>
+										<KanbanHeader className="px-4 border rounded-lg bg-background">
+											<div className="flex items-center justify-between gap-2">
+												<div className="flex items-center gap-2">
+													<div
+														className="h-2 w-2 rounded-full"
+														style={{ backgroundColor: column.color }}
+													/>
+													<span>{column.name}</span>
+												</div>
+												<span className="text-muted-foreground">
+													{
+														items.filter(
+															item => item.column === column.id,
+														).length
+													}
+												</span>
+											</div>
+										</KanbanHeader>
+										<KanbanCards id={column.id}>
+											{(issue: KanbanIssue) => (
+												<KanbanCard
+													column={column.id}
+													id={issue.id}
+													key={issue.id}
+													name={issue.title}
+												>
+													<IssueCard issue={issue} />
+												</KanbanCard>
+											)}
+										</KanbanCards>
+									</KanbanBoard>
+								)}
+							</KanbanProvider>
+						</Activity>
+					</Fragment>
+				)}
 			</div>
 			{selectedIssue && (
 				<UpdateIssue
