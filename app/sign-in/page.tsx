@@ -1,20 +1,19 @@
 "use client";
 import { signIn } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
 import {
 	Card,
-	CardAction,
 	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
 
 const formSchema = z.object({
 	email: z.string().email("Invalid email address"),

@@ -6,16 +6,6 @@ import postgres from "postgres";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
-export type State = {
-	errors?: {
-		title?: string[];
-		description?: string[];
-		status?: string[];
-		priority?: string[];
-	};
-	message?: string | null;
-};
-
 const parseListParam = (value: string) =>
 	value
 		.split(",")

@@ -22,16 +22,9 @@ export default async function Projects(props: {
 	const totalPages = await fetchProjectsPages(query, itemsPerPage, status, priority);
 
 	return (
-		<div className="p-4 pl-2 w-full flex flex-col gap-4 overflow-x-hidden">
+		<div className="p-4 w-full flex flex-col gap-4 overflow-x-hidden">
 			<Toolbar />
-			<Suspense
-				key={query + currentPage + itemsPerPage}
-				fallback={
-					<div className="w-full h-[60vh] grid place-content-center">
-						<Spinner />
-					</div>
-				}
-			>
+			<Suspense key={query + currentPage + itemsPerPage}>
 				<Table
 					query={query}
 					currentPage={currentPage}

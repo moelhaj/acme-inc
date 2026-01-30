@@ -1,47 +1,9 @@
 "use server";
-
-import { z } from "zod";
-import postgres from "postgres";
-import { revalidatePath } from "next/cache";
 import { Issue } from "@/lib/definitions";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import postgres from "postgres";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
-
-export type State = {
-	errors?: {
-		title?: string[];
-		description?: string[];
-		status?: string[];
-		priority?: string[];
-	};
-	message?: string | null;
-};
-
-const FormSchema = z.object({
-	id: z.string(),
-	project_id: z.string(),
-	title: z.string().min(1, "Title is required").max(100, "Title must be at most 100 characters"),
-	description: z
-		.string()
-		.min(1, "Description is required")
-		.max(500, "Description must be at most 500 characters"),
-	type: z.enum(["bug", "feature", "improvement"], {
-		message: "Type is required",
-	}),
-	status: z.enum(["todo", "in_progress", "in_review", "done"], {
-		message: "Status is required",
-	}),
-	priority: z.enum(["low", "medium", "high", "urgent"], {
-		message: "Priority is required",
-	}),
-	position: z.number().min(0),
-	created_at: z.string().optional(),
-	updated_at: z.string().optional(),
-});
-
-const CreateIssue = FormSchema.omit({ id: true, created_at: true, updated_at: true });
-const UpdateIssue = FormSchema.omit({ id: true, created_at: true, updated_at: true });
 
 const parseListParam = (value: string) =>
 	value
@@ -117,7 +79,7 @@ export async function fetchFilteredIssues(
 }
 
 export async function createIssue(
-	data: Omit<Issue, "id" | "position" | "created_at" | "updated_at">,
+	data: Omit<Issue, "id" | "position" | "statusUpdatedAt" | "created_at" | "updated_at">,
 ) {
 	const { title, description, type, status, priority, project_id, user_id } = data;
 	try {
@@ -170,18 +132,31 @@ export async function updateIssue(
 export async function deleteIssue(id: string) {
 	await sql`DELETE FROM issues WHERE id = ${id}`;
 	revalidatePath("/projects");
+	revalidatePath("/dashboard");
 }
 
 export async function updateIssuePositions(
 	projectId: string,
 	updates: Array<{ id: string; status: Issue["status"]; position: number }>,
 ) {
+	console.log("called");
 	if (updates.length === 0) return;
 	try {
 		await sql.begin(async transaction => {
 			for (const update of updates) {
 				await transaction.unsafe(
-					"UPDATE issues SET status = $1, position = $2, updated_at = NOW() WHERE id = $3",
+					`
+                        UPDATE issues
+                        SET
+                            status = $1,
+                            position = $2,
+                            updated_at = NOW(),
+                            status_updated_at = CASE
+                            WHEN status <> $1 THEN NOW()
+                            ELSE status_updated_at
+                            END
+                        WHERE id = $3
+                        `,
 					[update.status, update.position, update.id],
 				);
 			}
@@ -192,4 +167,5 @@ export async function updateIssuePositions(
 
 	revalidatePath(`/projects/${projectId}`);
 	revalidatePath("/projects");
+	revalidatePath("/dashboard");
 }

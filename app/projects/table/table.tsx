@@ -40,7 +40,7 @@ export default async function ProjectsTable({
 		currentPage,
 		itemsPerPage,
 		status,
-		priority
+		priority,
 	);
 
 	if (projects.length === 0) {
@@ -87,11 +87,11 @@ export default async function ProjectsTable({
 					))}
 				</div>
 			</div>
-			<div className="hidden w-full rounded-md border lg:flex">
+			<div className="hidden w-full rounded-md border lg:flex bg-card">
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead className="w-25">Title</TableHead>
+							<TableHead className="w-25 pl-4">Title</TableHead>
 							<TableHead>Description</TableHead>
 							<TableHead>Status</TableHead>
 							<TableHead>Priority</TableHead>
@@ -101,7 +101,7 @@ export default async function ProjectsTable({
 					<TableBody>
 						{projects.map(project => (
 							<TableRow key={project.id}>
-								<TableCell className="font-medium">
+								<TableCell className="font-medium pl-4">
 									<Link
 										href={`/projects/${project.id}`}
 										className="hover:underline"

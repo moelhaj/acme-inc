@@ -1,19 +1,17 @@
-import { Check, PlusCircle } from "lucide-react";
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
 	CommandGroup,
-	CommandInput,
 	CommandItem,
 	CommandList,
 	CommandSeparator,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Check, PlusCircle } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
 type Props = {
 	options: { value: string; label: string }[];
@@ -25,7 +23,7 @@ export function Filter({ options, label }: Props) {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const paramKey = label.toLowerCase();
-	const selectedValues = React.useMemo(() => {
+	const selectedValues = useMemo(() => {
 		const current = searchParams.get(paramKey);
 		if (!current) {
 			return new Set<string>();
@@ -41,9 +39,8 @@ export function Filter({ options, label }: Props) {
 					{label}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[200px] p-0" align="start">
+			<PopoverContent className="w-50 p-0" align="start">
 				<Command>
-					<CommandInput placeholder={label} />
 					<CommandList>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup>
@@ -74,7 +71,7 @@ export function Filter({ options, label }: Props) {
 									>
 										<div
 											className={cn(
-												"flex size-4 items-center justify-center rounded-[4px] border",
+												"flex size-4 items-center justify-center rounded-lg border",
 												isSelected
 													? "bg-primary border-primary text-primary-foreground"
 													: "border-input [&_svg]:invisible",

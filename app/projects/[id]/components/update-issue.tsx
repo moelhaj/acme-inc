@@ -1,4 +1,5 @@
 "use client";
+import { updateIssue } from "@/actions/issues";
 import { fetchUsers } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -25,16 +26,13 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
-import { Issue, IssueType, Priorities, Statuses, User } from "@/lib/definitions";
+import { Issue, Priorities, Statuses, Types, User } from "@/lib/definitions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
-import { updateIssue } from "@/actions/issues";
 
 const formSchema = z.object({
 	project_id: z.string(),
@@ -49,6 +47,7 @@ const formSchema = z.object({
 	status: z.enum(["todo", "in_progress", "in_review", "done"], {
 		message: "Status is required",
 	}),
+	statusUpdatedAt: z.string(),
 	priority: z.enum(["low", "medium", "high", "urgent"], {
 		message: "Priority is required",
 	}),
@@ -72,6 +71,7 @@ export function UpdateIssue({ open, setOpen, issue }: UpdateProjectProps) {
 			title: issue?.title || "",
 			description: issue?.description || "",
 			status: issue?.status || "todo",
+			statusUpdatedAt: issue?.statusUpdatedAt || new Date().toISOString(),
 			priority: issue?.priority || "low",
 			type: issue?.type || "bug",
 			user_id: issue?.user_id || "",
@@ -104,6 +104,7 @@ export function UpdateIssue({ open, setOpen, issue }: UpdateProjectProps) {
 			title: issue?.title || "",
 			description: issue?.description || "",
 			status: issue?.status || "todo",
+			statusUpdatedAt: issue?.statusUpdatedAt || new Date().toISOString(),
 			priority: issue?.priority || "low",
 			type: issue?.type || "bug",
 			user_id: issue?.user_id || "",
@@ -192,7 +193,7 @@ export function UpdateIssue({ open, setOpen, issue }: UpdateProjectProps) {
 											</SelectTrigger>
 											<SelectContent>
 												<SelectGroup>
-													{IssueType.map(type => (
+													{Types.map(type => (
 														<SelectItem
 															key={type.value}
 															value={type.value}

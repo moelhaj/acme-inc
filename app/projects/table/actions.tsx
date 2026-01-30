@@ -23,7 +23,7 @@ import { Spinner } from "@/components/ui/spinner";
 import useApp from "@/hooks/use-app";
 import { MoreHorizontal, Pin, PinOff, Settings2, Trash2 } from "lucide-react";
 import { Fragment, useState } from "react";
-import { UpdateProject } from "../[id]/components/update-project";
+import { UpdateProject } from "../components/update-project";
 import { Project } from "@/lib/definitions";
 
 export function DeleteProject({ id }: { id: string }) {

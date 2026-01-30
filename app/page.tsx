@@ -1,3 +1,4 @@
+import { Spinner } from "@/components/ui/spinner";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -10,7 +11,7 @@ export default async function Page() {
 	}
 	return (
 		<div className="fixed inset-0 z-50 w-screen h-screen grid place-content-center">
-			Loading ...
+			<Spinner />
 		</div>
 	);
 }

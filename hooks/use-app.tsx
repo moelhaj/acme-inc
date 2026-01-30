@@ -24,9 +24,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 	useEffect(() => {
 		try {
 			const stored = localStorage.getItem(STORAGE_KEY);
-			setPinnedProjects(stored ? JSON.parse(stored) : []);
+			setTimeout(() => {
+				if (stored) {
+					setPinnedProjects(JSON.parse(stored));
+				}
+			}, 0);
 		} catch {
-			setPinnedProjects([]);
+			setTimeout(() => {
+				setPinnedProjects([]);
+			}, 0);
 		}
 	}, []);
 
@@ -37,7 +43,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 			try {
 				localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
 			} catch {
-				// Ignore storage failures (private mode, quota, etc.)
+				throw new Error("Failed to pin project");
 			}
 			return next;
 		});
@@ -49,7 +55,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 			try {
 				localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
 			} catch {
-				// Ignore storage failures (private mode, quota, etc.)
+				throw new Error("Failed to unpin project");
 			}
 			return next;
 		});

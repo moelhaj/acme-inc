@@ -17,9 +17,8 @@ import {
 } from "@/components/ui/sidebar";
 import { ChevronsUpDown, LogOut } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
-import { User } from "@/lib/definitions";
 import { signOut } from "@/actions/auth";
-import { resolveAvatarSrc } from "@/lib/utils";
+import { User } from "@/lib/definitions";
 
 export function NavUser({ user }: { user: User }) {
 	const { isMobile } = useSidebar();
@@ -32,13 +31,13 @@ export function NavUser({ user }: { user: User }) {
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
-							<Avatar className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+							<Avatar className="h-8 w-8 flex items-center justify-center">
 								<AvatarImage
-									src={resolveAvatarSrc(user.avatar)}
+									src={`/${user.avatar}`}
 									alt={user.name}
 									className="h-6 w-6 rounded-full object-contain"
 								/>
-								<AvatarFallback className="rounded-lg">
+								<AvatarFallback className="rounded-full">
 									{user.name
 										.split(" ")
 										.map(name => name[0])
@@ -60,7 +59,7 @@ export function NavUser({ user }: { user: User }) {
 					>
 						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-								<div className="grid flex-1 text-left text-sm leading-tight">
+								<div className="grid flex-1 text-left text-sm leading-tight pl-2">
 									<span className="truncate font-medium">{user.name}</span>
 									<span className="truncate text-xs">{user.email}</span>
 								</div>

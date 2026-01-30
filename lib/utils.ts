@@ -20,9 +20,3 @@ export function generatePagination(currentPage: number, totalPages: number) {
 
 	return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
 }
-
-export function resolveAvatarSrc(value?: string | null) {
-	if (!value) return "";
-	if (value.startsWith("http") || value.startsWith("/")) return value;
-	return `/${value}`;
-}

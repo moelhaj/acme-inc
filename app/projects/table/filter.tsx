@@ -1,12 +1,10 @@
 import { Check, PlusCircle } from "lucide-react";
-import * as React from "react";
-
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
 	CommandGroup,
-	CommandInput,
 	CommandItem,
 	CommandList,
 	CommandSeparator,
@@ -25,7 +23,7 @@ export function FacetedFilter({ options, label }: Props) {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const paramKey = label.toLowerCase();
-	const selectedValues = React.useMemo(() => {
+	const selectedValues = useMemo(() => {
 		const current = searchParams.get(paramKey);
 		if (!current) {
 			return new Set<string>();
@@ -41,9 +39,8 @@ export function FacetedFilter({ options, label }: Props) {
 					{label}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[200px] p-0" align="start">
+			<PopoverContent className="w-50 p-0" align="start">
 				<Command>
-					<CommandInput placeholder={label} />
 					<CommandList>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup>
@@ -64,7 +61,7 @@ export function FacetedFilter({ options, label }: Props) {
 											if (newValues.size > 0) {
 												params.set(
 													paramKey,
-													Array.from(newValues).join(",")
+													Array.from(newValues).join(","),
 												);
 											} else {
 												params.delete(paramKey);
@@ -77,7 +74,7 @@ export function FacetedFilter({ options, label }: Props) {
 												"flex size-4 items-center justify-center rounded-[4px] border",
 												isSelected
 													? "bg-primary border-primary text-primary-foreground"
-													: "border-input [&_svg]:invisible"
+													: "border-input [&_svg]:invisible",
 											)}
 										>
 											<Check className="text-primary-foreground size-3.5" />

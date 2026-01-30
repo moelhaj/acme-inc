@@ -5,7 +5,7 @@ import { CircleXIcon, LoaderCircleIcon, Search as SearchIcon } from "lucide-reac
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { CreateProject } from "../[id]/components/create-project";
+import { CreateProject } from "../components/create-project";
 import { FacetedFilter } from "./filter";
 
 export default function Toolbar() {

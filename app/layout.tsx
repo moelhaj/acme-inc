@@ -1,18 +1,21 @@
-import { AppProvider } from "@/hooks/use-app";
 import { Header } from "@/components/header";
-import AppSidebarWrapper from "@/components/app-sidebar-wrapper";
+import SidebarWrapper from "@/components/sidebar-wrapper";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AppProvider } from "@/hooks/use-app";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Poppins } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
+const geistSans = Geist({
+	variable: "--font-geist-sans",
 	subsets: ["latin"],
-	weight: ["400", "700"],
-	variable: "--font-poppins",
+});
+
+const geistMono = Geist_Mono({
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +24,7 @@ export const metadata: Metadata = {
 		default: "Acme-Inc",
 	},
 	description: "Project management for developers",
-	metadataBase: new URL("https://acme-inc-zeta.vercel.app"),
+	metadataBase: new URL("https://acme-inc-ashen.vercel.app"),
 	keywords: ["Next.js", "React", "Tailwind CSS", "Server Components", "Shadcn", "AI Integration"],
 	authors: [
 		{
@@ -46,20 +49,19 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html className={poppins.className} lang="en" suppressHydrationWarning>
-			<body className="antialiased text-sm" suppressHydrationWarning>
+		<html lang="en">
+			<body className={`${geistSans.variable} ${geistMono.variable} antialiased text-sm`}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<TooltipProvider delayDuration={0}>
 						<AppProvider>
 							<SidebarProvider>
-								<AppSidebarWrapper />
-								<SidebarInset className="overflow-hidden">
+								<SidebarWrapper />
+								<SidebarInset>
 									<Header />
 									{children}
 								</SidebarInset>
 							</SidebarProvider>
 						</AppProvider>
-						<Toaster position="top-right" richColors duration={3000} closeButton />
 					</TooltipProvider>
 				</ThemeProvider>
 			</body>

@@ -24,19 +24,18 @@ export type Issue = {
 	id: string;
 	project_id: string;
 	user_id: string;
-	user_name?: string | null;
-	user_avatar?: string | null;
 	title: string;
 	description: string;
 	type: "bug" | "feature" | "improvement";
 	status: "todo" | "in_progress" | "in_review" | "done";
 	priority: "low" | "medium" | "high" | "urgent";
 	position: number;
+	statusUpdatedAt: string | null;
 	created_at: string;
 	updated_at: string;
 };
 
-export const IssueType = [
+export const Types = [
 	{
 		value: "bug",
 		label: "Bug",

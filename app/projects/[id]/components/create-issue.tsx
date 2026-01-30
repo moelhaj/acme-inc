@@ -29,7 +29,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
-import { IssueType, Priorities, Statuses, User } from "@/lib/definitions";
+import { Types, Priorities, Statuses, User } from "@/lib/definitions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -181,7 +181,7 @@ export function CreateIssue({ projectId }: Props) {
 											</SelectTrigger>
 											<SelectContent>
 												<SelectGroup>
-													{IssueType.map(type => (
+													{Types.map(type => (
 														<SelectItem
 															key={type.value}
 															value={type.value}

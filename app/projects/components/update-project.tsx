@@ -1,5 +1,5 @@
 "use client";
-import { createProject } from "@/actions/project";
+import { updateProject } from "@/actions/project";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -28,10 +28,10 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
-import { Priorities, Statuses } from "@/lib/definitions";
+import { Priorities, Project, Statuses } from "@/lib/definitions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -49,43 +49,52 @@ const formSchema = z.object({
 	}),
 });
 
-export function CreateIssue() {
-	const [open, setOpen] = useState(false);
+type UpdateProjectProps = {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+	project: Project;
+};
+
+export function UpdateProject({ open, setOpen, project }: UpdateProjectProps) {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: "",
-			description: "",
-			status: "todo",
-			priority: "low",
+			title: project.title,
+			description: project.description,
+			status: project.status,
+			priority: project.priority,
 		},
 	});
+
+	useEffect(() => {
+		if (!open) {
+			return;
+		}
+		form.reset({
+			title: project.title,
+			description: project.description,
+			status: project.status,
+			priority: project.priority,
+		});
+	}, [form, open, project]);
 
 	const isSubmitting = form.formState.isSubmitting;
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
-		await createProject(data);
+		await updateProject(project.id, data);
 		form.reset();
 		setOpen(false);
 	}
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetTrigger asChild>
-				<Button size="sm">
-					<Plus />
-					<span className="hidden md:block">Add Issue</span>
-				</Button>
-			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader className="pb-0">
-					<SheetTitle>Create project</SheetTitle>
-					<SheetDescription>
-						Fill in the form below to create a new project.
-					</SheetDescription>
+					<SheetTitle>Update project</SheetTitle>
+					<SheetDescription>Update the details of your project here.</SheetDescription>
 				</SheetHeader>
 				<form
-					id="create-project"
+					id="update-project"
 					className="px-4 h-[75vh] overflow-hidden overflow-y-auto"
 					onSubmit={form.handleSubmit(onSubmit)}
 				>
@@ -201,8 +210,8 @@ export function CreateIssue() {
 					</FieldGroup>
 				</form>
 				<SheetFooter>
-					<Button type="submit" form="create-project">
-						{isSubmitting ? <Spinner /> : "Create"}
+					<Button type="submit" form="update-project">
+						{isSubmitting ? <Spinner /> : "Update"}
 					</Button>
 					<SheetClose asChild>
 						<Button type="button" variant="outline">

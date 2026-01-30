@@ -1,9 +1,7 @@
 "use client";
-import { FolderTree, LayoutGrid, SquaresExclude } from "lucide-react";
-import * as React from "react";
-
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,41 +9,18 @@ import {
 	SidebarHeader,
 	SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
 import { User } from "@/lib/definitions";
+import { SquaresExclude } from "lucide-react";
 
-const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
-	navMain: [
-		{
-			title: "Dashboard",
-			url: "/dashboard",
-			icon: LayoutGrid,
-		},
-		{
-			title: "Projects",
-			url: "/projects",
-			icon: FolderTree,
-		},
-	],
-};
-
-export function AppSidebar({
-	user,
-	...props
-}: React.ComponentProps<typeof Sidebar> & { user: User | null }) {
+export function AppSidebar({ user }: { user: User | null }) {
 	return (
-		<Sidebar collapsible="icon" variant="floating" {...props}>
+		<Sidebar variant="inset">
 			<SidebarHeader>
 				<SidebarMenuButton
 					size="lg"
-					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-none"
 				>
-					<div className="bg-primary text-white flex aspect-square size-8 items-center justify-center rounded-lg">
+					<div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
 						<SquaresExclude className="size-4" />
 					</div>
 					<div className="grid flex-1 text-left text-sm leading-tight">
@@ -55,12 +30,10 @@ export function AppSidebar({
 				</SidebarMenuButton>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
+				<NavMain />
 				<NavProjects />
 			</SidebarContent>
-			<SidebarFooter>
-				{user && <NavUser user={user} />}
-			</SidebarFooter>
+			<SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
 		</Sidebar>
 	);
 }
