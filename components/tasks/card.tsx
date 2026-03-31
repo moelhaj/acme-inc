@@ -26,16 +26,17 @@ export default function KanbanCard({ task }: { task: BoardTask }) {
                 <div>
                     <Priority taskPriority={task.priority} />
                 </div>
-                <CardTitle className="mt-2">{task.title}</CardTitle>
+                <CardTitle className="mt-2 text-sm">{task.title}</CardTitle>
                 <CardDescription>{task.description}</CardDescription>
             </CardHeader>
             <CardFooter className="flex items-center justify-between bg-card py-2">
                 {task.user.name && task.user.avatar && (
                     <div className="flex items-center gap-2">
-                        <Avatar size="sm" className="border-0">
+                        <Avatar className="flex h-8 w-8 items-center justify-center">
                             <AvatarImage
                                 src={`/${task.user.avatar}`}
                                 alt={task.user.name}
+                                className="h-6 w-6 rounded-full object-contain"
                             />
                             <AvatarFallback>
                                 {task.user.name
@@ -44,7 +45,7 @@ export default function KanbanCard({ task }: { task: BoardTask }) {
                                     .join("")}
                             </AvatarFallback>
                         </Avatar>
-                        <span className="text-xs">{task.user.name}</span>
+                        <span>{task.user.name}</span>
                     </div>
                 )}
                 <span className="ml-2 rounded-md bg-muted px-2 py-1 text-xs capitalize">

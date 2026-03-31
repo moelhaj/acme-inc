@@ -18,7 +18,7 @@ import {
 const links = [
     {
         title: "Dashboard",
-        url: "/",
+        url: "/dashboard",
         icon: DashboardSquare02Icon,
     },
     {

@@ -33,7 +33,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                 />
             </Activity>
             <Activity mode={projects.length > 0 ? "visible" : "hidden"}>
-                <div className="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {projects.map((project) => (
                         <Card key={project.id}>
                             <CardHeader>
@@ -41,7 +41,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                                 <CardDescription>
                                     {project.description}
                                 </CardDescription>
-                                <CardAction className="-mt-2 -mr-1">
+                                <CardAction className="-mt-2 -mr-2">
                                     <ProjectAction project={project} />
                                 </CardAction>
                             </CardHeader>

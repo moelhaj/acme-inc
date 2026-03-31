@@ -1,17 +1,16 @@
-import { AppSidebar } from "@/components/app-sidebar"
 import Header from "@/components/header"
+import SidebarWrapper from "@/components/sidebar-wrapper"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Inter, Roboto } from "next/font/google"
 import "./globals.css"
 
-const fontSans = Geist({
-    subsets: ["latin"],
-    variable: "--font-sans",
-})
+const robotoHeading = Roboto({ subsets: ["latin"], variable: "--font-heading" })
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
     subsets: ["latin"],
@@ -65,17 +64,18 @@ export default function RootLayout({
                 "antialiased",
                 fontMono.variable,
                 "font-sans",
-                fontSans.variable
+                geist.variable,
+                robotoHeading.variable
             )}
         >
-            <body className="text-sm">
+            <body className="overflow-x-auto overflow-y-hidden text-sm">
                 <ThemeProvider>
                     <TooltipProvider>
                         <SidebarProvider>
-                            <AppSidebar />
+                            <SidebarWrapper />
                             <SidebarInset>
-                                <Header />
-                                <div className="h-[calc(100svh-5rem)] w-full overflow-hidden overflow-y-auto">
+                                <div className="h-screen w-full overflow-hidden">
+                                    <Header />
                                     {children}
                                 </div>
                             </SidebarInset>

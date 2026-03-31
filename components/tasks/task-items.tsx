@@ -10,6 +10,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Badge } from "../badge"
 
 export function Priority({ taskPriority }: { taskPriority: string }) {
     const selectedPriority = Priorities.find(
@@ -18,21 +19,21 @@ export function Priority({ taskPriority }: { taskPriority: string }) {
     switch (selectedPriority?.value) {
         case "low":
             return (
-                <span className="rounded-sm bg-green-200 px-2 py-1 text-[10px] font-medium text-green-800 dark:bg-green-400">
+                <Badge className="w-fit bg-green-200 text-green-800 dark:bg-green-400 dark:text-green-900">
                     {selectedPriority.label}
-                </span>
+                </Badge>
             )
         case "medium":
             return (
-                <span className="rounded-sm bg-orange-200 px-2 py-1 text-[10px] font-medium text-orange-800 dark:bg-orange-300">
+                <Badge className="w-fit bg-orange-200 text-orange-800 dark:bg-orange-400 dark:text-orange-900">
                     {selectedPriority.label}
-                </span>
+                </Badge>
             )
         case "high":
             return (
-                <span className="rounded-sm bg-rose-200 px-2 py-1 text-[10px] font-medium text-rose-800 dark:bg-rose-400">
+                <Badge className="w-fit bg-rose-200 text-rose-800 dark:bg-rose-400 dark:text-rose-900">
                     {selectedPriority.label}
-                </span>
+                </Badge>
             )
         default:
             return null

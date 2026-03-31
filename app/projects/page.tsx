@@ -2,6 +2,7 @@ import { getProjects } from "@/actions/project"
 import ProjectsHeader from "@/components/projects/projects-header"
 import ProjectsList from "@/components/projects/projects-list"
 import { ProjectsListSkeleton } from "@/components/skeleton"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Suspense } from "react"
 
 export default async function Projects(props: {
@@ -14,11 +15,13 @@ export default async function Projects(props: {
     const projects = await getProjects(query)
 
     return (
-        <div className="flex w-full flex-col overflow-x-hidden">
-            <ProjectsHeader />
-            <Suspense key={query} fallback={<ProjectsListSkeleton />}>
-                <ProjectsList projects={projects} />
-            </Suspense>
-        </div>
+        <ScrollArea className="h-[calc(100svh-4.5rem)]">
+            <div className="space-y-3 px-3 pt-1">
+                <ProjectsHeader />
+                <Suspense key={query} fallback={<ProjectsListSkeleton />}>
+                    <ProjectsList projects={projects} />
+                </Suspense>
+            </div>
+        </ScrollArea>
     )
 }

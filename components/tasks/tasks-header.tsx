@@ -21,12 +21,12 @@ type Props = {
 
 export default function KanbanHeader({ projectId, view, setView }: Props) {
     return (
-        <header className="flex items-center justify-between gap-4 px-4 pt-4">
-            <div className="flex items-center gap-2">
+        <header className="flex items-center gap-3 p-3 pt-0 pb-0">
+            <div className="flex items-center gap-3">
                 <SearchInput />
                 <TasksFilter />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="ml-auto flex items-center gap-2">
                 <div className="hidden items-center gap-2 lg:flex">
                     <ButtonGroup>
                         <Tooltip>

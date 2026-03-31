@@ -46,19 +46,21 @@ export default function KanbanColumn({
             onDragLeave={handleDragLeave}
             onDragEnd={handleDragEnd}
             onDrop={handleDrop}
-            className={cn(
-                "mb-1 flex h-[78svh] flex-col gap-2 overflow-hidden rounded-xl border bg-muted/40 ring-primary/30 ring-offset-2 ring-offset-background duration-300 dark:bg-muted/50 dark:ring-violet-200/50",
-                isDraggingOver && "ring-2"
-            )}
+            className="flex h-[calc(100svh-6.9rem)] flex-col gap-2 overflow-hidden"
         >
-            <div className="m-2 mb-0 flex items-center gap-2 rounded-lg border bg-card p-2 text-sm text-xs font-semibold">
+            <div
+                className={cn(
+                    "mx-3 mt-1 flex items-center gap-2 rounded-lg border bg-card p-2 text-sm text-xs font-semibold ring-primary/30 ring-offset-2 ring-offset-background duration-300",
+                    isDraggingOver && "ring-2"
+                )}
+            >
                 <span className="rounded-md bg-muted px-2 py-1">
                     {tasks.filter((task) => task.status === column.id).length}
                 </span>
                 <h2>{column.title}</h2>
             </div>
-            <ScrollArea className="h-[78svh]">
-                <div className="flex flex-col gap-2 px-2 pt-[1px] pb-4">
+            <ScrollArea className="h-[calc(100svh-6.9rem)]">
+                <div className="mx-3 my-1 flex flex-col gap-2 pb-14">
                     {tasks
                         .filter((task) => task.status === column.id)
                         .map((task) => (

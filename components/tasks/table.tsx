@@ -41,7 +41,7 @@ export default function IssuesTable({ projectId, tasks }: Props) {
                         <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody className="">
+                <TableBody>
                     {tasks.map((task) => (
                         <TableRow key={task.id}>
                             <TableCell className="pl-4 font-medium">

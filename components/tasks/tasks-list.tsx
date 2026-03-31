@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Priority } from "./task-items"
 import TaskActions from "./tasks-action"
 import { Fragment } from "react"
+import { ScrollArea } from "../ui/scroll-area"
 
 type Props = {
     projectId: string
@@ -30,38 +31,51 @@ export default function TasksLists({ projectId, tasks }: Props) {
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            {tasks.filter((task) => task.status === "todo").length > 0 && (
-                <ListItem
-                    heading="To Do"
-                    tasks={tasks.filter((task) => task.status === "todo")}
-                    projectId={projectId}
-                />
-            )}
-            {tasks.filter((task) => task.status === "in_progress").length >
-                0 && (
-                <ListItem
-                    heading="In Progress"
-                    tasks={tasks.filter(
-                        (task) => task.status === "in_progress"
+        <div className="h-[calc(100svh-8rem)] overflow-y-hidden">
+            <ScrollArea className="h-[calc(100svh-8rem)] w-full p-3 pb-0">
+                <div className="flex flex-col gap-3">
+                    {tasks.filter((task) => task.status === "todo").length >
+                        0 && (
+                        <ListItem
+                            heading="To Do"
+                            tasks={tasks.filter(
+                                (task) => task.status === "todo"
+                            )}
+                            projectId={projectId}
+                        />
                     )}
-                    projectId={projectId}
-                />
-            )}
-            {tasks.filter((task) => task.status === "in_review").length > 0 && (
-                <ListItem
-                    heading="In Review"
-                    tasks={tasks.filter((task) => task.status === "in_review")}
-                    projectId={projectId}
-                />
-            )}
-            {tasks.filter((task) => task.status === "done").length > 0 && (
-                <ListItem
-                    heading="Done"
-                    tasks={tasks.filter((task) => task.status === "done")}
-                    projectId={projectId}
-                />
-            )}
+                    {tasks.filter((task) => task.status === "in_progress")
+                        .length > 0 && (
+                        <ListItem
+                            heading="In Progress"
+                            tasks={tasks.filter(
+                                (task) => task.status === "in_progress"
+                            )}
+                            projectId={projectId}
+                        />
+                    )}
+                    {tasks.filter((task) => task.status === "in_review")
+                        .length > 0 && (
+                        <ListItem
+                            heading="In Review"
+                            tasks={tasks.filter(
+                                (task) => task.status === "in_review"
+                            )}
+                            projectId={projectId}
+                        />
+                    )}
+                    {tasks.filter((task) => task.status === "done").length >
+                        0 && (
+                        <ListItem
+                            heading="Done"
+                            tasks={tasks.filter(
+                                (task) => task.status === "done"
+                            )}
+                            projectId={projectId}
+                        />
+                    )}
+                </div>
+            </ScrollArea>
         </div>
     )
 }
@@ -77,8 +91,8 @@ function ListItem({
 }) {
     return (
         <Fragment>
-            <div className="flex items-center gap-2 rounded-lg bg-accent px-4 py-3 text-xs font-medium">
-                <span className="rounded-sm bg-foreground/20 px-1.5 py-0.5">
+            <div className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-xs font-medium">
+                <span className="rounded-sm bg-foreground/20 px-2 py-0.5">
                     {tasks.length}
                 </span>
                 {heading}
@@ -111,10 +125,11 @@ function ListItem({
                                 {task.type}
                             </TableCell>
                             <TableCell className="flex items-center gap-2">
-                                <Avatar size="sm">
+                                <Avatar className="flex h-8 w-8 items-center justify-center">
                                     <AvatarImage
                                         src={`/${task.user.avatar}`}
                                         alt={task.user.name}
+                                        className="h-6 w-6 rounded-full object-contain"
                                     />
                                     <AvatarFallback>
                                         {task.user.name

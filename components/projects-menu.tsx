@@ -32,7 +32,7 @@ export function ProjectsMenu({ projects }: { projects: Props[] }) {
                                 render={
                                     <Link
                                         href={projectUrl}
-                                        className="flex h-full w-full items-center gap-2 text-xs"
+                                        className="flex h-full w-full items-center gap-2"
                                     >
                                         <div
                                             className={cn(

@@ -60,7 +60,7 @@ export default function KanbanBoard({
     }
 
     return (
-        <div className="h-[calc(100svh-5rem)] overflow-hidden">
+        <div className="h-[calc(100svh-3rem)] space-y-3 overflow-x-auto overflow-y-hidden pt-1">
             <KanbanToolbar
                 projectId={projectId}
                 view={view}
@@ -84,12 +84,12 @@ export default function KanbanBoard({
                 />
             </Activity>
             <Activity mode={tasks.length > 0 ? "visible" : "hidden"}>
-                <div className="h-full w-full p-4 lg:hidden">
+                <div className="h-full w-full lg:hidden">
                     <TasksLists projectId={projectId} tasks={optimisticTasks} />
                 </div>
                 <div className="hidden lg:block">
                     {view === "table" && (
-                        <div className="h-full w-full p-4">
+                        <div className="h-full w-full">
                             <TasksLists
                                 projectId={projectId}
                                 tasks={optimisticTasks}
@@ -97,7 +97,7 @@ export default function KanbanBoard({
                         </div>
                     )}
                     {view === "board" && (
-                        <div className="grid grid-cols-4 gap-2 p-4">
+                        <div className="grid grid-cols-4">
                             {columns.map((column) => (
                                 <KanbanColumn
                                     key={column.id}

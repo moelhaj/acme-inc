@@ -7,7 +7,7 @@ export default async function NavProject() {
     return (
         <Suspense fallback={<div>Loading projects ...</div>}>
             <Activity mode={projects.length === 0 ? "visible" : "hidden"}>
-                <p className="px-2 text-xs text-muted-foreground">
+                <p className="px-2 text-muted-foreground">
                     No projects found. Create a project to see it here.
                 </p>
             </Activity>
