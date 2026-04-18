@@ -1,0 +1,84 @@
+generator client {
+    provider = "prisma-client"
+    output   = "./generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum UserRole {
+    user
+    admin
+}
+
+enum TaskStatus {
+    todo
+    in_progress
+    in_review
+    done
+}
+
+enum TaskPriority {
+    low
+    medium
+    high
+}
+
+enum TaskType {
+    feature
+    bug
+    improvement
+}
+
+model User {
+    id        String   @id @default(dbgenerated("gen_random_uuid()"))
+    name      String
+    email     String   @unique
+    password  String
+    title     String
+    avatar    String
+    role      UserRole @default(user)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    projects Project[]
+    tasks    Task[]
+}
+
+model Project {
+    id          String   @id @default(dbgenerated("gen_random_uuid()"))
+    title       String
+    description String
+    dueDate     DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    members User[]
+    tasks   Task[]
+}
+
+model Task {
+    id          String       @id @default(dbgenerated("gen_random_uuid()"))
+    title       String
+    description String
+    status      TaskStatus   @default(todo)
+    priority    TaskPriority @default(medium)
+    type        TaskType     @default(feature)
+    position    Int          @default(0)
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+
+    projectId String
+    userId    String
+
+    project Project @relation(fields: [projectId], references: [id])
+    user    User    @relation(fields: [userId], references: [id])
+}
+
+model AiLogs {
+    id        String   @id @default(dbgenerated("gen_random_uuid()"))
+    input     String
+    output    String
+    createdAt DateTime @default(now())
+}
