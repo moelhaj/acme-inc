@@ -16,7 +16,6 @@ export default function TasksColumn({
     updateTask: (
         taskId: string,
         newStatus: TaskStatus,
-        currentPosition: number,
         newPosition: number
     ) => void
 }) {
@@ -53,7 +52,6 @@ export default function TasksColumn({
         updateTask(
             taskId,
             column.id as TaskStatus,
-            activeTask.position,
             draggedOverTask?.position || 0
         )
         setIsDraggingOver(false)

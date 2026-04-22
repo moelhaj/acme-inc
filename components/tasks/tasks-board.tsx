@@ -36,50 +36,46 @@ export default function TasksBoard({
     tasks: BoardTask[]
     projectId: string
 }) {
-    const [optimisticTasks, setOptimisticTasks] = useOptimistic(
-        tasks.sort((a, b) => a.position - b.position),
-        (
-            currentTasks: BoardTask[],
-            action: {
-                taskId: string
-                newStatus: TaskStatus
-                newPosition: number
-            }
-        ) => {
-            return currentTasks.map((task) => {
-                if (task.id === action.taskId) {
-                    return {
-                        ...task,
-                        status: action.newStatus,
-                        position: action.newPosition,
-                    }
-                }
-                return task
-            })
-        }
+    const [optimisticTasks, setOptimisticTasks] = useOptimistic<
+        BoardTask[],
+        BoardTask[]
+    >(
+        [...tasks].sort((a, b) => a.position - b.position),
+        (_, newTasks) => newTasks
     )
+
     function updateTask(
         taskId: string,
         newStatus: TaskStatus,
-        currentPosition: number,
         newPosition: number
     ) {
-        const updated = [...tasks]
-        const [element] = updated.splice(currentPosition, 1)
+        const updated = [...optimisticTasks]
+        const currentIndex = updated.findIndex((t) => t.id === taskId)
+        if (currentIndex === -1) return
 
-        updated.splice(newPosition, 0, element)
+        const [element] = updated.splice(currentIndex, 1)
+        const targetIndex = updated.findIndex((t) => t.position === newPosition)
+        updated.splice(
+            targetIndex === -1 ? updated.length : targetIndex,
+            0,
+            { ...element, status: newStatus }
+        )
 
-        const updatedTasks = updated.map((task, index) => {
-            return {
-                id: task.id,
-                status: task.id === taskId ? newStatus : task.status,
-                position: index,
-            }
-        })
+        const reordered = updated.map((task, index) => ({
+            ...task,
+            position: index,
+        }))
 
         startTransition(() => {
-            setOptimisticTasks({ taskId, newStatus, newPosition })
-            void updateTaskStatus({ projectId, params: updatedTasks })
+            setOptimisticTasks(reordered)
+            void updateTaskStatus({
+                projectId,
+                params: reordered.map(({ id, status, position }) => ({
+                    id,
+                    status,
+                    position,
+                })),
+            })
         })
     }
 
