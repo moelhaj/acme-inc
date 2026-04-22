@@ -84,7 +84,7 @@ export default function TasksBoard({
     }
 
     return (
-        <div className="space-y-3 overflow-hidden p-3">
+        <div className="space-y-3 p-3">
             <TasksHeader projectId={projectId} />
             <Activity mode={tasks.length === 0 ? "visible" : "hidden"}>
                 <Empty
@@ -105,7 +105,7 @@ export default function TasksBoard({
             </Activity>
             <Activity mode={tasks.length > 0 ? "visible" : "hidden"}>
                 <ScrollArea className="w-[100vw] lg:w-full">
-                    <div className="grid w-full grid-cols-4">
+                    <div className="grid min-w-[800px] grid-cols-4">
                         {columns.map((column) => (
                             <KanbanColumn
                                 key={column.id}
