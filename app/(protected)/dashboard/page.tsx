@@ -9,7 +9,7 @@ import {
     MetricsSkeleton,
     TasksCardsSkeleton,
     WorkloadSkeleton,
-} from "@/components/dashboard/skeletons"
+} from "@/components/skeletons"
 
 export default function DashboardPage() {
     return (

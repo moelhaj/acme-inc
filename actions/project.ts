@@ -58,6 +58,7 @@ export async function fetchProjects(query: string) {
                 createdAt: "desc",
             },
         })
+        await new Promise((resolve) => setTimeout(resolve, 5000))
         return projects
     } catch (error) {
         throw new Error("Failed to fetch projects.")

@@ -1,5 +1,6 @@
 import { fetchProjects } from "@/actions/project"
 import ProjectsList from "@/components/projects/projects-list"
+import { ProjectsSkeleton } from "@/components/skeletons"
 import { Suspense } from "react"
 
 export default async function ProjectsPage(props: {
@@ -13,7 +14,7 @@ export default async function ProjectsPage(props: {
 
     return (
         <div className="w-full p-3">
-            <Suspense key={query}>
+            <Suspense key={query} fallback={<ProjectsSkeleton />}>
                 <ProjectsList projects={projects} />
             </Suspense>
         </div>
