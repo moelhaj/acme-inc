@@ -163,7 +163,7 @@ export async function createTask(
         revalidatePath(`/projects/${projectId}`)
         return { message: "Task created successfully!", status: "success" }
     } catch (error) {
-        throw new Error("Failed to create task.")
+        return { status: "error", message: "Failed to create task." }
     }
 }
 
@@ -251,7 +251,7 @@ export async function updateTask(
             },
         }
     } catch (error) {
-        throw new Error("Failed to update task.")
+        return { status: "error", message: "Failed to update task." }
     }
 }
 

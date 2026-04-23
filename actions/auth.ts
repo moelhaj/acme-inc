@@ -9,6 +9,7 @@ import { z } from "zod"
 const SESSION_DURATION_MS = 12 * 60 * 60 * 1000
 
 export type State = {
+    status?: string
     message?: string | null
     errors?: {
         email?: string[]
@@ -32,6 +33,7 @@ export async function Login(
 
     if (!validatedFields.success) {
         return {
+            status: "error",
             errors: validatedFields.error.flatten().fieldErrors,
             message: "Missing fields. Failed to sign in.",
         }
@@ -44,6 +46,7 @@ export async function Login(
         })
         if (!user) {
             return {
+                status: "error",
                 message: "Invalid credentials",
             }
         }
@@ -51,15 +54,17 @@ export async function Login(
 
         if (!passwordsMatch) {
             return {
+                status: "error",
                 message: "Invalid credentials",
             }
         }
 
         const expires = new Date(Date.now() + SESSION_DURATION_MS)
-        const session = await encrypt({ user, expires })
+        const { password: _pw, ...userWithoutPassword } = user
+        const session = await encrypt({ user: userWithoutPassword, expires })
         ;(await cookies()).set("session", session, { expires, httpOnly: true })
     } catch (error) {
-        return { message: "Failed to sign in." }
+        return { status: "error", message: "Failed to sign in." }
     }
     redirect("/")
 }

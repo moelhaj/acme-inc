@@ -58,7 +58,6 @@ export async function fetchProjects(query: string) {
                 createdAt: "desc",
             },
         })
-        await new Promise((resolve) => setTimeout(resolve, 5000))
         return projects
     } catch (error) {
         throw new Error("Failed to fetch projects.")
@@ -79,7 +78,7 @@ export async function fetchProjectsTitles() {
         })
         return projects
     } catch (error) {
-        throw new Error("Failed to fetch project titles")
+        throw new Error("Failed to fetch project titles.")
     }
 }
 
@@ -136,7 +135,7 @@ export async function createProject(
         revalidatePath("/projects")
         return { message: "Project created successfully!", status: "success" }
     } catch (error) {
-        throw new Error("Failed to create project.")
+        return { status: "error", message: "Failed to create project." }
     }
 }
 
@@ -204,7 +203,7 @@ export async function updateProject(
             },
         }
     } catch (error) {
-        throw new Error("Failed to update project.")
+        return { status: "error", message: "Failed to update project." }
     }
 }
 
