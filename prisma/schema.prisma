@@ -7,11 +7,6 @@ datasource db {
     provider = "postgresql"
 }
 
-enum UserRole {
-    user
-    admin
-}
-
 enum TaskStatus {
     todo
     in_progress
@@ -35,10 +30,8 @@ model User {
     id        String   @id @default(dbgenerated("gen_random_uuid()"))
     name      String
     email     String   @unique
-    password  String
     title     String
     avatar    String
-    role      UserRole @default(user)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
