@@ -5,18 +5,13 @@ import {
     SidebarHeader,
     SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { SessionPayload } from "@/lib/auth"
-import { AiBrain05Icon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
+import { AppLogo } from "./app-logo"
 import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
-import { NavUser } from "./nav-user"
 import { SidebarTrigger } from "./sidebar-trigger"
-import { AppLogo } from "./app-logo"
+import { ThemeToggle } from "./theme-toggle"
 
-type SidebarUser = SessionPayload["user"]
-
-export function AppSidebar({ user }: { user: SidebarUser | null }) {
+export function AppSidebar() {
     return (
         <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
@@ -31,7 +26,9 @@ export function AppSidebar({ user }: { user: SidebarUser | null }) {
                 <NavMain />
                 <NavProjects />
             </SidebarContent>
-            <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
+            <SidebarFooter>
+                <ThemeToggle />
+            </SidebarFooter>
             <div className="absolute top-1/2 left-full -ml-3.5 hidden -translate-y-1/2 md:block">
                 <SidebarTrigger />
             </div>

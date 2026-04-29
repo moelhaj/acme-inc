@@ -1,11 +1,14 @@
-import { Geist } from "next/font/google"
+import { AppSidebar } from "@/components/nav/app-sidebar"
+import Header from "@/components/nav/header"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import type { Metadata } from "next"
 import { cn } from "@/lib/utils"
+import type { Metadata } from "next"
+import { Geist } from "next/font/google"
 import "./globals.css"
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
     title: {
@@ -54,7 +57,17 @@ export default function RootLayout({
         >
             <body>
                 <ThemeProvider>
-                    <TooltipProvider>{children}</TooltipProvider>
+                    <TooltipProvider>
+                        <SidebarProvider>
+                            <AppSidebar />
+                            <SidebarInset>
+                                <div className="flex h-full flex-col">
+                                    <Header />
+                                    {children}
+                                </div>
+                            </SidebarInset>
+                        </SidebarProvider>
+                    </TooltipProvider>
                 </ThemeProvider>
             </body>
         </html>

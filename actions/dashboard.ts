@@ -5,14 +5,12 @@ import {
     TaskStatus,
     TaskType,
 } from "@/prisma/generated/prisma/client"
-import { isAuthenticated } from "@/lib/auth"
 
 const OVERLOAD_THRESHOLD = 1.5
 const TOP_USERS_COUNT = 4
 const THREE_DAYS_AGO = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
 
 export async function getWorkload() {
-    await isAuthenticated()
     try {
         const workloadRows = await prisma.user.findMany({
             select: {
@@ -55,7 +53,6 @@ export async function getWorkload() {
 }
 
 export async function getMetrics() {
-    await isAuthenticated()
     try {
         const [totalTask, inReview, highOpen, stuckTasks] = await Promise.all([
             prisma.task.count(),
@@ -89,7 +86,6 @@ export async function getMetrics() {
 }
 
 export async function getBottlenecks() {
-    await isAuthenticated()
     try {
         const projects = await prisma.project.findMany({
             include: {
@@ -136,7 +132,6 @@ export async function getBottlenecks() {
 }
 
 export async function getTasksByStatus() {
-    await isAuthenticated()
     try {
         const tasksByStatusRaw = await prisma.task.groupBy({
             by: ["status"],
@@ -156,7 +151,6 @@ export async function getTasksByStatus() {
 }
 
 export async function getTasksByPriorities() {
-    await isAuthenticated()
     try {
         const tasksByPriorityRaw = await prisma.task.groupBy({
             by: ["priority"],
@@ -176,7 +170,6 @@ export async function getTasksByPriorities() {
 }
 
 export async function getTasksByType() {
-    await isAuthenticated()
     try {
         const tasksByTypeRaw = await prisma.task.groupBy({
             by: ["type"],

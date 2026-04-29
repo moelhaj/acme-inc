@@ -77,7 +77,7 @@ export default function TasksColumn({
                 <h2>{column.title}</h2>
             </div>
             <ScrollArea className="h-[calc(100svh-6.5rem)]">
-                <div className="mx-1.5 flex flex-col gap-3 pt-3">
+                <div className="mx-1.5 flex flex-col gap-3 pt-3 pb-2">
                     {tasks
                         .filter((task) => task.status === column.id)
                         .map((task) => (

@@ -1,10 +1,9 @@
 "use client"
 import { useTheme } from "next-themes"
 import { useCallback } from "react"
-import { Button } from "../ui/button"
-import { DropdownMenuItem } from "../ui/dropdown-menu"
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
 
-export function ThemeToggle({ sidebar }: { sidebar?: boolean }) {
+export function ThemeToggle() {
     const { resolvedTheme, setTheme } = useTheme()
 
     const toggleTheme = useCallback(() => {
@@ -33,24 +32,18 @@ export function ThemeToggle({ sidebar }: { sidebar?: boolean }) {
         </svg>
     )
 
-    if (sidebar) {
-        return (
-            <DropdownMenuItem onClick={toggleTheme}>
-                {svgIcon}
-                Theme
-            </DropdownMenuItem>
-        )
-    }
-
     return (
-        <Button
-            variant="secondary"
-            size="icon"
-            className="group/toggle extend-touch-target"
-            onClick={toggleTheme}
-        >
-            {svgIcon}
-            <span className="sr-only">Toggle theme</span>
-        </Button>
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                    className="cursor-pointer rounded-md data-active:font-normal"
+                    tooltip="Theme"
+                    onClick={toggleTheme}
+                >
+                    {svgIcon}
+                    Theme
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
     )
 }

@@ -33,7 +33,7 @@ export function ProjectsMenu({ projects }: { projects: Props[] }) {
                             <SidebarMenuButton asChild>
                                 <Link
                                     href={projectUrl}
-                                    className="flex h-full w-full items-center gap-2"
+                                    className="flex h-full w-full items-center gap-2 text-xs"
                                 >
                                     <div
                                         className={cn(

@@ -6,7 +6,6 @@ import {
     TaskPriority,
     TaskType,
 } from "@/prisma/generated/prisma/client"
-import { isAuthenticated } from "@/lib/auth"
 import { z } from "zod"
 
 export type TaskState = {
@@ -64,7 +63,6 @@ export async function getTasks(
     priority: TaskPriority[],
     type: TaskType[]
 ) {
-    await isAuthenticated()
     try {
         const tasks = await prisma.task.findMany({
             where: {
@@ -104,7 +102,6 @@ export async function createTask(
     prevState: TaskState,
     formData: FormData
 ): Promise<TaskState> {
-    await isAuthenticated()
     const rawTask = {
         title: formData.get("title"),
         description: formData.get("description"),
@@ -171,7 +168,6 @@ export async function updateTask(
     prevState: TaskState,
     formData: FormData
 ): Promise<TaskState> {
-    await isAuthenticated()
     const rawTask = {
         id: formData.get("id"),
         title: formData.get("title"),
@@ -256,7 +252,6 @@ export async function updateTask(
 }
 
 export async function deleteTask(id: string, projectId: string) {
-    await isAuthenticated()
     try {
         await prisma.task.delete({
             where: { id },
@@ -280,7 +275,6 @@ export async function updateTaskStatus({
     projectId: string
     params: UpdateTaskStatusParams
 }) {
-    await isAuthenticated()
     try {
         await prisma.$transaction(
             params.map((param) =>

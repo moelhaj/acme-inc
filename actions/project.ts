@@ -1,5 +1,4 @@
 "use server"
-import { isAuthenticated } from "@/lib/auth"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
@@ -42,7 +41,6 @@ const ProjectSchema = z.object({
 const ModifyProject = ProjectSchema.omit({ id: true })
 
 export async function fetchProjects(query: string) {
-    await isAuthenticated()
     try {
         const projects = await prisma.project.findMany({
             where: {
@@ -65,7 +63,6 @@ export async function fetchProjects(query: string) {
 }
 
 export async function fetchProjectsTitles() {
-    await isAuthenticated()
     try {
         const projects = await prisma.project.findMany({
             select: {
@@ -86,7 +83,6 @@ export async function createProject(
     prevState: State,
     formData: FormData
 ): Promise<State> {
-    await isAuthenticated()
     const rawProject = {
         title: formData.get("title"),
         description: formData.get("description"),
@@ -143,7 +139,6 @@ export async function updateProject(
     prevState: State,
     formData: FormData
 ): Promise<State> {
-    await isAuthenticated()
     const rawProject = {
         id: formData.get("id"),
         title: formData.get("title"),
@@ -208,7 +203,6 @@ export async function updateProject(
 }
 
 export async function deleteProject(id: string) {
-    await isAuthenticated()
     try {
         await prisma.project.delete({
             where: { id },
