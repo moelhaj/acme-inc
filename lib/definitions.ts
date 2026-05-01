@@ -4,9 +4,10 @@ import {
     TaskType,
     Task,
     User,
+    Project,
 } from "@/prisma/generated/prisma/client"
 
-export type { TaskType, TaskStatus, TaskPriority, Task, User }
+export type { TaskType, TaskStatus, TaskPriority, Task, User, Project }
 
 export const Priorities = [
     { value: "low", label: "Low" },
@@ -38,33 +39,4 @@ export type Column = {
 export type State = {
     message?: string | null
     status: string
-}
-
-export type Snapshot = {
-    tasks: {
-        open: number
-        inReview: number
-        highOpen: number
-    }
-    stuck: Array<{
-        id: string
-        title: string
-        days: number
-        priority: string
-        projectId: string
-    }>
-    workload: Array<{
-        userId: string
-        name: string
-        avatar: string
-        active: number
-        high: number
-        score: number
-    }>
-    overloaded: Array<{
-        userId: string
-        name: string
-        score: number
-        ratioVsAvg: number
-    }>
 }
