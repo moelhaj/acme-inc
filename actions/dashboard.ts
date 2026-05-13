@@ -7,30 +7,36 @@ import {
 } from "@/prisma/generated/prisma/client"
 
 const OVERLOAD_THRESHOLD = 1.5
-const TOP_USERS_COUNT = 4
+const TOP_USERS_COUNT = 3
 const THREE_DAYS_AGO = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
 
 export async function getWorkload() {
   try {
-    const workloadRows = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        avatar: true,
-        title: true,
-        _count: {
-          select: {
-            tasks: true,
+    const [usersCount, tasksCount, workloadRows] = await Promise.all([
+      prisma.user.count(),
+      prisma.task.count(),
+      prisma.user.findMany({
+        take: TOP_USERS_COUNT,
+        orderBy: {
+          tasks: {
+            _count: "desc",
           },
         },
-      },
-    })
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          title: true,
+          _count: {
+            select: {
+              tasks: true,
+            },
+          },
+        },
+      }),
+    ])
 
-    const averageWorkload =
-      workloadRows.length > 0
-        ? workloadRows.reduce((sum, user) => sum + user._count.tasks, 0) /
-          workloadRows.length
-        : 0
+    const averageWorkload = usersCount > 0 ? tasksCount / usersCount : 0
 
     const workload = workloadRows.map((user) => ({
       id: user.id,
@@ -42,8 +48,6 @@ export async function getWorkload() {
     }))
 
     return workload
-      .sort((a, b) => b.tasksCount - a.tasksCount)
-      .slice(0, TOP_USERS_COUNT)
   } catch (error) {
     throw new Error("Failed to fetch workload data")
   }
@@ -84,26 +88,63 @@ export async function getMetrics() {
 
 export async function getBottlenecks() {
   try {
-    const projects = await prisma.project.findMany({
-      include: {
-        tasks: true,
+    const topProjectsByBottlenecks = await prisma.task.groupBy({
+      by: ["projectId"],
+      where: {
+        status: TaskStatus.in_review,
+        updatedAt: {
+          lte: THREE_DAYS_AGO,
+        },
+      },
+      _count: {
+        projectId: true,
+      },
+      orderBy: {
         _count: {
-          select: { tasks: true },
+          projectId: "desc",
+        },
+      },
+      take: TOP_USERS_COUNT,
+    })
+
+    if (topProjectsByBottlenecks.length === 0) {
+      return []
+    }
+
+    const projectIds = topProjectsByBottlenecks.map(
+      (project) => project.projectId
+    )
+
+    const projects = await prisma.project.findMany({
+      where: {
+        id: {
+          in: projectIds,
+        },
+      },
+      select: {
+        id: true,
+        tasks: {
+          where: {
+            status: TaskStatus.in_review,
+            updatedAt: {
+              lte: THREE_DAYS_AGO,
+            },
+          },
         },
       },
     })
 
-    const bottleneckProjects = projects
-      .map((project) => {
-        const inReviewTasks = project.tasks.filter(
-          (task) =>
-            task.status === TaskStatus.in_review &&
-            task.updatedAt <= THREE_DAYS_AGO
-        )
+    const projectsById = new Map(
+      projects.map((project) => [project.id, project])
+    )
 
-        if (inReviewTasks.length === 0) return null
+    const bottleneckProjects = topProjectsByBottlenecks
+      .map((projectCount) => {
+        const project = projectsById.get(projectCount.projectId)
 
-        const bottleneckTask = inReviewTasks.reduce((oldest, task) =>
+        if (!project || project.tasks.length === 0) return null
+
+        const bottleneckTask = project.tasks.reduce((oldest, task) =>
           task.updatedAt < oldest.updatedAt ? task : oldest
         )
 
@@ -111,16 +152,15 @@ export async function getBottlenecks() {
           id: bottleneckTask.id,
           title: bottleneckTask.title,
           priority: bottleneckTask.priority,
-          projectId: project.id,
+          projectId: projectCount.projectId,
           daysInReview: Math.ceil(
             (Date.now() - bottleneckTask.updatedAt.getTime()) / 86400000
           ),
         }
       })
       .filter((p): p is NonNullable<typeof p> => p !== null)
+
     return bottleneckProjects
-      .sort((a, b) => b.daysInReview - a.daysInReview)
-      .slice(0, TOP_USERS_COUNT)
   } catch (error) {
     throw new Error("Failed to fetch bottlenecks")
   }

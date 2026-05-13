@@ -1,27 +1,48 @@
 import { getTasksByType } from "@/actions/dashboard"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import PipelineChart from "@/components/dashboard/pipeline-chart"
+import PieChart from "@/components/pie-chart"
 
 export default async function TasksByTypes() {
-    const tasks = await getTasksByType()
-    const data = [
-        { value: tasks.feature, label: "Feature", color: "var(--chart-1)" },
-        { value: tasks.bug, label: "Bug", color: "var(--chart-2)" },
-        {
-            value: tasks.improvement,
-            label: "Improvement",
-            color: "var(--chart-3)",
-        },
-    ]
+  const tasks = await getTasksByType()
 
-    return (
-        <Card>
-            <CardHeader className="items-center pb-0">
-                <CardTitle>Tasks by types</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 pb-0">
-                <PipelineChart data={data} />
-            </CardContent>
-        </Card>
-    )
+  const chartData = [
+    { taskType: "feature", tasks: tasks.feature, fill: "var(--color-feature)" },
+    {
+      taskType: "bug",
+      tasks: tasks.bug,
+      fill: "var(--color-bug)",
+    },
+    {
+      taskType: "improvement",
+      tasks: tasks.improvement,
+      fill: "var(--color-improvement)",
+    },
+  ]
+
+  const chartConfig = {
+    tasks: {
+      label: "Tasks",
+    },
+    feature: {
+      label: "Feature",
+      color: "var(--chart-2)",
+    },
+    bug: {
+      label: "Bug",
+      color: "var(--chart-1)",
+    },
+    improvement: {
+      label: "Improvement",
+      color: "var(--chart-3)",
+    },
+  }
+
+  return (
+    <PieChart
+      title="Tasks by type"
+      dataKey="tasks"
+      nameKey="taskType"
+      chartData={chartData}
+      chartConfig={chartConfig}
+    />
+  )
 }

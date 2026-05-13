@@ -1,23 +1,48 @@
 import { getTasksByPriorities } from "@/actions/dashboard"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import PipelineChart from "@/components/dashboard/pipeline-chart"
+import PieChart from "@/components/pie-chart"
 
 export default async function TasksByPriorities() {
-    const tasks = await getTasksByPriorities()
-    const data = [
-        { value: tasks.low, label: "Low", color: "var(--chart-1)" },
-        { value: tasks.medium, label: "Medium", color: "var(--chart-2)" },
-        { value: tasks.high, label: "High", color: "var(--chart-3)" },
-    ]
+  const tasks = await getTasksByPriorities()
 
-    return (
-        <Card>
-            <CardHeader className="items-center pb-0">
-                <CardTitle>Tasks by priorities</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 pb-0">
-                <PipelineChart data={data} />
-            </CardContent>
-        </Card>
-    )
+  const chartData = [
+    { priority: "low", tasks: tasks.low, fill: "var(--color-low)" },
+    {
+      priority: "medium",
+      tasks: tasks.medium,
+      fill: "var(--color-medium)",
+    },
+    {
+      priority: "high",
+      tasks: tasks.high,
+      fill: "var(--color-high)",
+    },
+  ]
+
+  const chartConfig = {
+    tasks: {
+      label: "Tasks",
+    },
+    low: {
+      label: "Low",
+      color: "var(--chart-3)",
+    },
+    medium: {
+      label: "Medium",
+      color: "var(--chart-2)",
+    },
+    high: {
+      label: "High",
+      color: "var(--chart-1)",
+    },
+  }
+
+  return (
+    <PieChart
+      title="Tasks by priorities"
+      dataKey="tasks"
+      nameKey="priority"
+      chartData={chartData}
+      chartConfig={chartConfig}
+    />
+  )
 }
