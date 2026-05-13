@@ -24,13 +24,15 @@ export default async function Bottleneck() {
             <Link
               key={task.id}
               href={`/tasks/${task.projectId}`}
-              className="group mb-6 flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-muted/70 px-4 py-2"
+              className="group mb-3 flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-muted/70 px-4 py-2"
             >
               <div className="flex flex-col gap-1">
                 <span className="font-medium">{task.title}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground">
-                    In review for {task.daysInReview} days -
+                    {task.daysInReview > 0
+                      ? `In review for ${task.daysInReview} days -`
+                      : "Needs attention -"}
                   </span>
                   <span className="text-xs text-muted-foreground first-letter:uppercase">
                     {task.priority} priority
