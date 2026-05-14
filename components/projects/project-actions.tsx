@@ -1,5 +1,5 @@
 "use client"
-import { deleteProject, fetchProjects } from "@/actions/project"
+import { deleteProject } from "@/actions/project"
 import DeleteModal from "@/components/delete-modal"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ProjectWithMembers } from "@/lib/definitions"
 import {
   Delete02Icon,
   MoreHorizontalCircle01Icon,
@@ -18,11 +19,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Fragment, useState } from "react"
 import ProjectForm from "./project-form"
 
-export function ProjectAction({
-  project,
-}: {
-  project: Awaited<ReturnType<typeof fetchProjects>>[number]
-}) {
+export function ProjectAction({ project }: { project: ProjectWithMembers }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
