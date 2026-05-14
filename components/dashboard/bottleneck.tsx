@@ -7,7 +7,7 @@ import { getBottlenecks } from "@/actions/dashboard"
 export default async function Bottleneck() {
   const projects = await getBottlenecks()
   return (
-    <Card className="gap-2">
+    <Card className="gap-6">
       <CardHeader>
         <CardTitle>Urgent bottleneck</CardTitle>
       </CardHeader>

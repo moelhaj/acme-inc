@@ -6,7 +6,7 @@ import UserChip from "../user-chip"
 export default async function Workload() {
   const workload = await getWorkload()
   return (
-    <Card className="gap-3">
+    <Card className="gap-6">
       <CardHeader>
         <CardTitle>Workload Distribution</CardTitle>
       </CardHeader>
