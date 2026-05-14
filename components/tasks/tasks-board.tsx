@@ -9,6 +9,7 @@ import { Activity, startTransition, useOptimistic, useState } from "react"
 import KanbanColumn from "./tasks-column"
 import TasksHeader from "./tasks-header"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import AppItem from "../app-item"
 
 const columns = [
   {
@@ -88,24 +89,12 @@ export default function TasksBoard({
   return (
     <div className="space-y-3 p-3">
       <TasksHeader projectId={projectId} onSearch={setSearchTerm} />
-      <Activity mode={visibleTasks.length === 0 ? "visible" : "hidden"}>
-        <Empty
-          icon={
-            <HugeiconsIcon
-              icon={TaskAdd01Icon}
-              size={36}
-              color="currentColor"
-              strokeWidth={1.5}
-            />
-          }
-          title="No tasks found"
-          description="Tip: If you didn't create any task yet, you
-                                can start by creating a new task. If you
-                                are searching for a specific task, try adjusting
-                                your search or filter criteria."
-        />
-      </Activity>
-      <Activity mode={visibleTasks.length > 0 ? "visible" : "hidden"}>
+      <AppItem
+        emptyTitle="No tasks found"
+        emptyLabel="task"
+        hide={visibleTasks.length <= 0}
+        show={visibleTasks.length > 0}
+      >
         <ScrollArea className="w-[100vw] lg:w-full">
           <div className="grid min-w-[800px] grid-cols-4">
             {columns.map((column) => (
@@ -119,7 +108,7 @@ export default function TasksBoard({
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
-      </Activity>
+      </AppItem>
     </div>
   )
 }

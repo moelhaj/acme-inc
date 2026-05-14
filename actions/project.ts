@@ -10,7 +10,9 @@ type ProjectPayload = {
   members?: string[] | undefined
 }
 
-export async function fetchProjects(query: string) {
+const ROWS_PER_PAGE = 10
+
+export async function fetchProjects(query: string, page: number) {
   try {
     const projects = await prisma.project.findMany({
       where: {
@@ -22,11 +24,22 @@ export async function fetchProjects(query: string) {
       include: {
         members: true,
       },
+      skip: (page - 1) * ROWS_PER_PAGE,
+      take: ROWS_PER_PAGE,
       orderBy: {
         createdAt: "desc",
       },
     })
-    return projects
+    const projectsCount = await prisma.project.count({
+      where: {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+    })
+    const totalPages = Math.ceil(projectsCount / ROWS_PER_PAGE)
+    return { projects, totalPages }
   } catch (error) {
     throw new Error("Failed to fetch projects.")
   }
