@@ -1,7 +1,6 @@
 "use server"
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 
 type ProjectPayload = {
   title: string
@@ -12,7 +11,7 @@ type ProjectPayload = {
 
 const ROWS_PER_PAGE = 10
 
-export async function fetchProjects(query: string, page: number) {
+export async function getProjects(query: string, page: number) {
   try {
     const projects = await prisma.project.findMany({
       where: {
@@ -45,7 +44,7 @@ export async function fetchProjects(query: string, page: number) {
   }
 }
 
-export async function fetchProjectsTitles() {
+export async function getProjectsTitles() {
   try {
     const projects = await prisma.project.findMany({
       select: {

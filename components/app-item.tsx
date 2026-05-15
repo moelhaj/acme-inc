@@ -6,7 +6,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { Blockchain04Icon } from "@hugeicons/core-free-icons"
+import { SettingError03Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Activity, Fragment } from "react"
 
@@ -33,7 +33,7 @@ export default function AppItem({
             <EmptyHeader>
               <EmptyMedia variant="icon" className="bg-muted">
                 <HugeiconsIcon
-                  icon={Blockchain04Icon}
+                  icon={SettingError03Icon}
                   size={36}
                   color="currentColor"
                   strokeWidth={1.5}

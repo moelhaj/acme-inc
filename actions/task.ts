@@ -70,6 +70,7 @@ export async function getTasks(projectId: string) {
           select: {
             name: true,
             avatar: true,
+            title: true,
           },
         },
         project: {

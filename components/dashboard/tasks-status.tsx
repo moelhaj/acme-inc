@@ -1,5 +1,5 @@
 import { getTasksByStatus } from "@/actions/dashboard"
-import PieChart from "@/components/pie-chart"
+import PieChart from "@/components/charts/pie-chart"
 
 export default async function TasksByStatus() {
   const tasks = await getTasksByStatus()

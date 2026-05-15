@@ -28,6 +28,7 @@ export type BoardTask = Task & {
   user: {
     name: string
     avatar: string
+    title: string
   }
   project: {
     title: string

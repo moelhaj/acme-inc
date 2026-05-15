@@ -25,12 +25,19 @@ export default function ProjectsList({
         hide={projects.length <= 0}
         show={projects.length > 0}
       >
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+        <div className="space-y-3">
+          <div className="hidden grid-cols-3 rounded-lg bg-muted px-3 py-3 lg:grid">
+            <span className="pl-1 text-muted-foreground">Project</span>
+            <span className="pl-2 text-muted-foreground">Members</span>
+            <span className="pl-2 text-muted-foreground">Due date</span>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+          <Pagination totalPages={totalPages} />
         </div>
-        <Pagination totalPages={totalPages} />
       </AppItem>
     </div>
   )

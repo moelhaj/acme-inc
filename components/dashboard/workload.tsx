@@ -15,7 +15,7 @@ export default async function Workload() {
           {workload.map((user) => (
             <div
               key={user.id}
-              className="grid grid-cols-7 rounded-md bg-muted/70 p-3 text-xs"
+              className="grid grid-cols-7 rounded-lg bg-muted/70 p-3 text-xs"
             >
               <div className="col-span-4">
                 <UserChip

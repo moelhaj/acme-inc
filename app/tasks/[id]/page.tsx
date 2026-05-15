@@ -1,13 +1,7 @@
 import { getTasks } from "@/actions/task"
-import {
-  TaskPriority,
-  TaskStatus,
-  TaskType,
-} from "@/prisma/generated/prisma/client"
+import TasksWrapper from "@/components/tasks/tasks-wrapper"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
-import TasksBoard from "@/components/tasks/tasks-board"
-import { toArray } from "@/lib/utils"
 
 export default async function Project(props: {
   params: Promise<{ id: string }>
@@ -22,7 +16,7 @@ export default async function Project(props: {
 
   return (
     <Suspense>
-      <TasksBoard tasks={tasks} projectId={params.id} />
+      <TasksWrapper tasks={tasks} projectId={params.id} />
     </Suspense>
   )
 }

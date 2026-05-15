@@ -3,19 +3,19 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Fragment } from "react/jsx-runtime"
 
 export function AppLogo() {
-    return (
-        <Fragment>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <HugeiconsIcon
-                    icon={AiBrain05Icon}
-                    strokeWidth={2}
-                    className="size-4"
-                />
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Acme Inc</span>
-                <span className="truncate text-xs">Enterprise</span>
-            </div>
-        </Fragment>
-    )
+  return (
+    <Fragment>
+      <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+        <HugeiconsIcon
+          icon={AiBrain05Icon}
+          strokeWidth={2}
+          className="size-4"
+        />
+      </div>
+      <div className="ml-2 grid flex-1 text-left text-sm leading-tight md:ml-0">
+        <span className="truncate font-medium">Acme Inc</span>
+        <span className="truncate text-xs">Enterprise</span>
+      </div>
+    </Fragment>
+  )
 }

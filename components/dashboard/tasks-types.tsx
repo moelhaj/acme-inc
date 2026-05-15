@@ -1,5 +1,5 @@
 import { getTasksByType } from "@/actions/dashboard"
-import PieChart from "@/components/pie-chart"
+import PieChart from "@/components/charts/pie-chart"
 
 export default async function TasksByTypes() {
   const tasks = await getTasksByType()

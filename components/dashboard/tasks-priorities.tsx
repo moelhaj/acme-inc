@@ -1,5 +1,5 @@
 import { getTasksByPriorities } from "@/actions/dashboard"
-import PieChart from "@/components/pie-chart"
+import PieChart from "@/components/charts/pie-chart"
 
 export default async function TasksByPriorities() {
   const tasks = await getTasksByPriorities()

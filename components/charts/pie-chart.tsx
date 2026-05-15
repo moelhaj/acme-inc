@@ -49,7 +49,7 @@ export default function PieChartComponent({
             />
             <ChartLegend
               content={<ChartLegendContent nameKey={nameKey} />}
-              className="translate-y-2 flex-wrap gap-2 whitespace-nowrap *:basis-1/5 *:justify-center"
+              className="w-full translate-y-2 gap-2 whitespace-nowrap *:justify-center"
             />
           </PieChart>
         </ChartContainer>
