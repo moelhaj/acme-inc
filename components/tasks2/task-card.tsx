@@ -12,7 +12,7 @@ import { BoardTask } from "@/lib/definitions"
 import { cn, userInitials } from "@/lib/utils"
 import { Fragment, useState } from "react"
 import ModifyTask from "./modify-task"
-import { TaskAction } from "./task-action"
+// import { TaskAction } from "./task-action"
 import { TaskPriority, TaskType } from "./task-items"
 
 type TaskCardProps = {
@@ -70,7 +70,7 @@ export default function TaskCard({ task, setDraggedOverTask }: TaskCardProps) {
             {task.description}
           </CardDescription>
           <CardAction className="-mt-2 -mr-2">
-            <TaskAction task={task} projectId={task.projectId} />
+            {/* <TaskAction task={task} projectId={task.projectId} /> */}
           </CardAction>
         </CardHeader>
         <CardFooter className="flex items-center justify-between bg-card py-2">

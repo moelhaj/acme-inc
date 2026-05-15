@@ -11,7 +11,7 @@ export default function ProjectCard({
   project: ProjectWithMembers
 }) {
   return (
-    <div className="relative grid grid-cols-1 gap-3 rounded-lg bg-sidebar p-3 ring-1 ring-border lg:grid-cols-3">
+    <div className="relative grid grid-cols-1 gap-3 rounded-lg bg-sidebar p-3 ring-1 ring-border lg:grid-cols-3 lg:rounded-none lg:py-1 lg:last:rounded-b-lg">
       <div>
         <Link
           className="text-sm font-medium hover:underline"

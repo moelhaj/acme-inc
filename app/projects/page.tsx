@@ -1,6 +1,7 @@
 import { getProjects } from "@/actions/project"
 import { columns } from "@/components/projects/projects-column"
 import ProjectsHeader from "@/components/projects/projects-header"
+import ProjectsList from "@/components/projects/projects-list"
 import { ProjectsSkeleton } from "@/components/skeletons"
 import { DataTable } from "@/components/table/data-table"
 import { Suspense } from "react"
@@ -20,7 +21,8 @@ export default async function ProjectsPage(props: {
     <Suspense key={query + page} fallback={<ProjectsSkeleton />}>
       <div className="space-y-3 p-3">
         <ProjectsHeader />
-        <DataTable columns={columns} data={projects} totalPages={totalPages} />
+        {/* <DataTable columns={columns} data={projects} totalPages={totalPages} /> */}
+        <ProjectsList projects={projects} totalPages={totalPages} />
       </div>
     </Suspense>
   )

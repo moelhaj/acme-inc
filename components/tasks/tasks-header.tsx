@@ -31,7 +31,7 @@ export default function TasksHeader({
   }
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-2">
       <div className="relative w-full max-w-42 md:max-w-60">
         <Input
           id="search-input"
@@ -56,7 +56,6 @@ export default function TasksHeader({
           </button>
         )}
       </div>
-      <div className="flex-1" />
       <div className="hidden items-center gap-4 xl:flex">
         <ToggleGroup
           variant="outline"
@@ -69,19 +68,22 @@ export default function TasksHeader({
               icon={KanbanIcon}
               size={24}
               color="currentColor"
-              strokeWidth={1.5}
+              strokeWidth={2}
             />
+            <span className="text-sm font-normal">Kanban</span>
           </ToggleGroupItem>
           <ToggleGroupItem value="table" aria-label="Toggle table view">
             <HugeiconsIcon
               icon={AppleReminderIcon}
               size={24}
               color="currentColor"
-              strokeWidth={1.5}
+              strokeWidth={2}
             />
+            <span className="text-sm font-normal">Table</span>
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
+      <div className="flex-1" />
     </div>
   )
 }

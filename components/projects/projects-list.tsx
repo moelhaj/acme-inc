@@ -1,13 +1,8 @@
 "use client"
-import Empty from "@/components/empty"
-import { ProjectWithMembers } from "@/lib/definitions"
-import { Blockchain04Icon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Activity } from "react"
-import ProjectCard from "./project-card"
-import ProjectsHeader from "./projects-header"
-import Pagination from "./projects-pagination"
 import AppItem from "@/components/app-item"
+import { ProjectWithMembers } from "@/lib/definitions"
+import ProjectCard from "./project-card"
+import Pagination from "./projects-pagination"
 
 export default function ProjectsList({
   projects,
@@ -17,28 +12,25 @@ export default function ProjectsList({
   totalPages: number
 }) {
   return (
-    <div className="flex flex-1 flex-col gap-3">
-      <ProjectsHeader />
-      <AppItem
-        emptyTitle="No projects found"
-        emptyLabel="project"
-        hide={projects.length <= 0}
-        show={projects.length > 0}
-      >
-        <div className="space-y-3">
-          <div className="hidden grid-cols-3 rounded-lg bg-muted px-3 py-3 lg:grid">
-            <span className="pl-1 text-muted-foreground">Project</span>
-            <span className="pl-2 text-muted-foreground">Members</span>
-            <span className="pl-2 text-muted-foreground">Due date</span>
-          </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-          <Pagination totalPages={totalPages} />
+    <AppItem
+      emptyTitle="No projects found"
+      emptyLabel="project"
+      hide={projects.length <= 0}
+      show={projects.length > 0}
+    >
+      <div>
+        <div className="hidden grid-cols-3 rounded-t-lg p-3 ring-1 ring-border lg:grid">
+          <span className="pl-1 text-sm font-medium">Project</span>
+          <span className="pl-1 text-sm font-medium">Members</span>
+          <span className="pl-1 text-sm font-medium">Due date</span>
         </div>
-      </AppItem>
-    </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 lg:gap-0">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+      </div>
+      <Pagination totalPages={totalPages} />
+    </AppItem>
   )
 }

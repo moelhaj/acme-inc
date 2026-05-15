@@ -73,7 +73,6 @@ export async function createProject(data: ProjectPayload) {
     })
     revalidatePath("/projects")
   } catch (error) {
-    console.log(error)
     throw new Error("Failed to create project.")
   }
 }

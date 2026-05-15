@@ -28,7 +28,7 @@ import Pagination from "./pagination"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  totalPages: number
+  totalPages?: number
 }
 
 export function DataTable<TData, TValue>({
@@ -72,10 +72,10 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <div className="w-full rounded-lg bg-sidebar whitespace-nowrap ring-1 ring-border">
         <Table>
-          <TableHeader>
+          <TableHeader className="hidden lg:table-header-group">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -93,7 +93,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="grid gap-1 lg:table-row-group">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <Pagination totalPages={totalPages} />
+      {totalPages && <Pagination totalPages={totalPages} />}
     </div>
   )
 }

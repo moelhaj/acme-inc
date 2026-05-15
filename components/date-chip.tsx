@@ -8,9 +8,9 @@ export default function DateChip({ date }: { date: Date }) {
     <div className="flex w-fit flex-row items-center gap-2">
       <HugeiconsIcon
         icon={Calendar03Icon}
-        size={18}
+        size={16}
         color="currentColor"
-        strokeWidth={1.5}
+        strokeWidth={2}
       />
       <span className="text-sm whitespace-nowrap">{formatDueDate(date)}</span>
     </div>

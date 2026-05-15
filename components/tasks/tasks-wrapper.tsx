@@ -32,16 +32,16 @@ export default function TasksWrapper({
         hide={tasks.length <= 0}
         show={tasks.length > 0}
       >
-        <div className="flex xl:hidden">
+        <div className="flex w-full flex-1 xl:hidden">
           <TasksTable tasks={tasks} />
         </div>
         <Activity mode={view === "table" ? "visible" : "hidden"}>
-          <div className="hidden xl:flex">
+          <div className="hidden w-full flex-1 xl:flex">
             <TasksTable tasks={tasks} />
           </div>
         </Activity>
         <Activity mode={view === "board" ? "visible" : "hidden"}>
-          <div className="hidden xl:flex">board view</div>
+          <div className="hidden flex-1 xl:flex">board view</div>
         </Activity>
       </AppItem>
     </div>
