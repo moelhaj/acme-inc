@@ -19,7 +19,7 @@ export default function ProjectsList({
       show={projects.length > 0}
     >
       <div>
-        <div className="hidden grid-cols-3 rounded-t-lg p-3 ring-1 ring-border lg:grid">
+        <div className="hidden grid-cols-3 rounded-t-lg bg-sidebar p-3 ring-1 ring-border lg:grid">
           <span className="pl-1 text-sm font-medium">Project</span>
           <span className="pl-1 text-sm font-medium">Members</span>
           <span className="pl-1 text-sm font-medium">Due date</span>
