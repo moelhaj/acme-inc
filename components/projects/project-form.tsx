@@ -104,7 +104,7 @@ export default function ProjectForm({
           <form
             id="project-form"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-3"
+            className="space-y-3 pb-1"
           >
             {isEditing && <input type="hidden" name="id" value={project.id} />}
             <FieldGroup className="gap-4">
@@ -157,6 +157,7 @@ export default function ProjectForm({
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="form-members">Members</FieldLabel>
                     <SelectUsers
+                      multiple
                       selectedUsers={field.value ?? []}
                       setSelectedUsers={(value) => {
                         const currentMembers = field.value ?? []

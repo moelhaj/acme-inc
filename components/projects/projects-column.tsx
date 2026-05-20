@@ -13,7 +13,7 @@ export const columns: ColumnDef<ProjectWithMembers>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-2">
         <Link
-          className="font-medium hover:underline"
+          className="font-medium select-none hover:underline"
           href={`/tasks/${row.original.id}`}
         >
           {row.original.title}

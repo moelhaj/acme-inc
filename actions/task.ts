@@ -63,7 +63,7 @@ export async function getTasks(projectId: string) {
         projectId,
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
       include: {
         user: {
@@ -86,130 +86,47 @@ export async function getTasks(projectId: string) {
   }
 }
 
-export async function createTask(
-  prevState: TaskState,
-  formData: FormData
-): Promise<TaskState> {
-  const rawTask = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    type: formData.get("type"),
-    status: formData.get("status"),
-    priority: formData.get("priority"),
-    projectId: formData.get("projectId"),
-    userId: formData.get("userId"),
-  }
-  const validatedFields = ModifyTask.safeParse(rawTask)
+type TaskPayload = {
+  title: string
+  description: string
+  type: TaskType
+  priority: TaskPriority
+  userId: string
+}
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing fields. Failed to create task.",
-      fields: {
-        title: typeof rawTask.title === "string" ? rawTask.title : "",
-        description:
-          typeof rawTask.description === "string" ? rawTask.description : "",
-        type: typeof rawTask.type === "string" ? rawTask.type : "",
-        status: typeof rawTask.status === "string" ? rawTask.status : "",
-        priority: typeof rawTask.priority === "string" ? rawTask.priority : "",
-        projectId:
-          typeof rawTask.projectId === "string" ? rawTask.projectId : "",
-        userId: typeof rawTask.userId === "string" ? rawTask.userId : "",
-      },
-      status: "error",
-    }
-  }
-
-  const { projectId } = validatedFields.data
-  const lastTodoTask = await prisma.task.findFirst({
-    where: {
-      projectId,
-      status: "todo",
-    },
-    orderBy: {
-      position: "desc",
-    },
-  })
-
-  const position = lastTodoTask ? lastTodoTask.position + 1 : 0
+export async function createTask(projectId: string, data: TaskPayload) {
   try {
-    await prisma.task.create({
-      data: { ...validatedFields.data, position: position },
+    const lastTodoTask = await prisma.task.findFirst({
+      where: {
+        projectId,
+        status: "todo",
+      },
+      orderBy: {
+        position: "desc",
+      },
     })
-    revalidatePath(`/projects/${projectId}`)
-    return { message: "Task created successfully!", status: "success" }
+
+    const position = lastTodoTask ? lastTodoTask.position + 1 : 0
+    await prisma.task.create({
+      data: { ...data, position: position, status: "todo", projectId },
+    })
+    revalidatePath(`/tasks/${projectId}`)
   } catch (error) {
-    return { status: "error", message: "Failed to create task." }
+    throw new Error("Failed to create task.")
   }
 }
 
 export async function updateTask(
-  prevState: TaskState,
-  formData: FormData
-): Promise<TaskState> {
-  const rawTask = {
-    id: formData.get("id"),
-    title: formData.get("title"),
-    description: formData.get("description"),
-    type: formData.get("type"),
-    status: formData.get("status"),
-    priority: formData.get("priority"),
-    projectId: formData.get("projectId"),
-    userId: formData.get("userId"),
-  }
-  const validatedFields = TaskSchema.safeParse(rawTask)
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing fields. Failed to update task.",
-      fields: {
-        title: typeof rawTask.title === "string" ? rawTask.title : "",
-        description:
-          typeof rawTask.description === "string" ? rawTask.description : "",
-        type: typeof rawTask.type === "string" ? rawTask.type : "",
-        status: typeof rawTask.status === "string" ? rawTask.status : "",
-        priority: typeof rawTask.priority === "string" ? rawTask.priority : "",
-        projectId:
-          typeof rawTask.projectId === "string" ? rawTask.projectId : "",
-        userId: typeof rawTask.userId === "string" ? rawTask.userId : "",
-      },
-      status: "error",
-    }
-  }
-
-  const { id, projectId, title, description, type, status, priority, userId } =
-    validatedFields.data
+  task: TaskPayload & { id?: string; projectId: string }
+) {
   try {
     await prisma.task.update({
-      where: { id },
-      data: {
-        id,
-        projectId,
-        title,
-        description,
-        type,
-        status,
-        priority,
-        userId,
-      },
+      where: { id: task.id },
+      data: task,
     })
-    revalidatePath(`/projects/${projectId}`)
-    return {
-      message: "Task updated successfully!",
-      status: "success",
-      fields: {
-        title,
-        description,
-        type,
-        status,
-        priority,
-        projectId,
-        userId,
-      },
-    }
+    revalidatePath(`/tasks/${task.projectId}`)
   } catch (error) {
-    return { status: "error", message: "Failed to update task." }
+    throw new Error("Failed to update task.")
   }
 }
 
@@ -218,7 +135,7 @@ export async function deleteTask(id: string, projectId: string) {
     await prisma.task.delete({
       where: { id },
     })
-    revalidatePath(`/projects/${projectId}`)
+    revalidatePath(`/tasks/${projectId}`)
   } catch (error) {
     throw new Error("Failed to delete task.")
   }
@@ -246,7 +163,7 @@ export async function updateTaskStatus({
         })
       )
     )
-    revalidatePath(`/projects/${projectId}`)
+    revalidatePath(`/tasks/${projectId}`)
   } catch (error) {
     throw new Error("Failed to update task status.")
   }

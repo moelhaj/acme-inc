@@ -24,7 +24,7 @@ export default async function Bottleneck() {
             <Link
               key={project.id}
               href={`/tasks/${project.id}`}
-              className="group mb-3 flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-muted/70 px-4 py-2"
+              className="group mb-3 flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-muted/70 px-4 py-2 select-none"
             >
               <div className="flex flex-col gap-1">
                 <span className="font-medium">{project.title}</span>

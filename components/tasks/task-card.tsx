@@ -11,9 +11,9 @@ import {
 import { BoardTask } from "@/lib/definitions"
 import { cn, userInitials } from "@/lib/utils"
 import { Fragment, useState } from "react"
-import ModifyTask from "./modify-task"
-// import { TaskAction } from "./task-action"
+import TaskForm from "./task-form"
 import { TaskPriority, TaskType } from "./task-items"
+import { TaskAction } from "./task-action"
 
 type TaskCardProps = {
   task: BoardTask
@@ -70,7 +70,7 @@ export default function TaskCard({ task, setDraggedOverTask }: TaskCardProps) {
             {task.description}
           </CardDescription>
           <CardAction className="-mt-2 -mr-2">
-            {/* <TaskAction task={task} projectId={task.projectId} /> */}
+            <TaskAction task={task} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex items-center justify-between bg-card py-2">
@@ -90,10 +90,11 @@ export default function TaskCard({ task, setDraggedOverTask }: TaskCardProps) {
           <TaskType taskType={task.type} />
         </CardFooter>
       </Card>
-      <ModifyTask
+      <TaskForm
         open={openUpdateSheet}
         setOpen={setOpenUpdateSheet}
         task={task}
+        projectId={task.projectId}
       />
     </Fragment>
   )

@@ -12,17 +12,24 @@ export type ProjectWithMembers = Project & {
   members: User[]
 }
 
-export const Priorities = [
+export const TaskPriorities = [
   { value: "low", label: "Low" },
   { value: "medium", label: "Medium" },
   { value: "high", label: "High" },
 ] satisfies Array<{ value: TaskPriority; label: string }>
 
-export const Types = [
+export const TaskTypes = [
   { value: "feature", label: "Feature" },
   { value: "bug", label: "Bug" },
   { value: "improvement", label: "Improvement" },
 ] satisfies Array<{ value: TaskType; label: string }>
+
+export const TaskStatuses = [
+  { value: "todo", label: "To Do" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "in_review", label: "In Review" },
+  { value: "done", label: "Done" },
+] satisfies Array<{ value: TaskStatus; label: string }>
 
 export type BoardTask = Task & {
   user: {

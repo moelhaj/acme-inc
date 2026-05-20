@@ -40,8 +40,9 @@ export default function TasksColumn({
     const taskId = event.dataTransfer.getData("activeTaskId")
     const activeTask = tasks.find((task) => task.id === taskId)
     if (
-      !activeTask ||
-      (activeTask.status === column.id && activeTask.id === draggedOverTask?.id)
+      activeTask &&
+      activeTask.status === column.id &&
+      activeTask.id === draggedOverTask?.id
     ) {
       return
     }

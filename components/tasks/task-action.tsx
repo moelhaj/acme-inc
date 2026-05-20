@@ -16,12 +16,12 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Fragment, useState } from "react"
-// import ModifyTask from "./modify-task"
-import { Task } from "@/lib/definitions"
+import { BoardTask, Task } from "@/lib/definitions"
+import TaskForm from "./task-form"
 
-export function TaskAction({ task }: { task: Task }) {
+export function TaskAction({ task }: { task: BoardTask }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [openUpdateSheet, setOpenUpdateSheet] = useState(false)
+  const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   async function handleDelete() {
@@ -55,7 +55,7 @@ export function TaskAction({ task }: { task: Task }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onClick={() => setOpenUpdateSheet(true)}>
+          <DropdownMenuItem onClick={() => setOpenUpdateModal(true)}>
             <HugeiconsIcon
               icon={Settings01Icon}
               size={20}
@@ -88,11 +88,12 @@ export function TaskAction({ task }: { task: Task }) {
         title="Delete project?"
         isLoading={isLoading}
       />
-      {/* <ModifyTask
-        open={openUpdateSheet}
-        setOpen={setOpenUpdateSheet}
+      <TaskForm
+        open={openUpdateModal}
+        setOpen={setOpenUpdateModal}
         task={task}
-      /> */}
+        projectId={task.projectId}
+      />
     </Fragment>
   )
 }

@@ -1,9 +1,7 @@
 import { getProjects } from "@/actions/project"
-import { columns } from "@/components/projects/projects-column"
 import ProjectsHeader from "@/components/projects/projects-header"
 import ProjectsList from "@/components/projects/projects-list"
 import { ProjectsSkeleton } from "@/components/skeletons"
-import { DataTable } from "@/components/table/data-table"
 import { Suspense } from "react"
 
 export default async function ProjectsPage(props: {

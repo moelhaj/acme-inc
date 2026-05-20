@@ -1,9 +1,41 @@
 "use client"
 import { BoardTask } from "@/lib/definitions"
-import { Activity, useState } from "react"
+import { Activity, useMemo, useState } from "react"
 import TasksHeader from "./tasks-header"
-import TasksTable from "./tasks-table"
+import TasksList from "./tasks-list"
 import AppItem from "../app-item"
+import TasksKanban from "./tasks-kanban"
+
+type TaskFilters = {
+  priority: string[]
+  type: string[]
+  status: string[]
+}
+
+function applyTaskFilters(
+  tasks: BoardTask[],
+  searchTerm: string,
+  filters: TaskFilters
+) {
+  const normalizedSearch = searchTerm.trim().toLowerCase()
+
+  return tasks.filter((task) => {
+    const matchesSearch =
+      normalizedSearch === "" ||
+      task.title.toLowerCase().includes(normalizedSearch)
+
+    const matchesPriority =
+      filters.priority.length === 0 || filters.priority.includes(task.priority)
+
+    const matchesType =
+      filters.type.length === 0 || filters.type.includes(task.type)
+
+    const matchesStatus =
+      filters.status.length === 0 || filters.status.includes(task.status)
+
+    return matchesSearch && matchesPriority && matchesType && matchesStatus
+  })
+}
 
 export default function TasksWrapper({
   tasks: initialTasks,
@@ -12,20 +44,43 @@ export default function TasksWrapper({
   tasks: BoardTask[]
   projectId: string
 }) {
-  const [tasks, setTasks] = useState<BoardTask[]>(initialTasks)
   const [view, setView] = useState<"board" | "table">("board")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filters, setFilters] = useState<TaskFilters>({
+    priority: [],
+    type: [],
+    status: [],
+  })
+
+  const tasks = useMemo(
+    () => applyTaskFilters(initialTasks, searchTerm, filters),
+    [initialTasks, searchTerm, filters]
+  )
 
   function searchTasks(term: string) {
-    setTasks(
-      initialTasks.filter((task) =>
-        task.title.toLowerCase().includes(term.toLowerCase())
-      )
-    )
+    setSearchTerm(term)
+  }
+
+  function filterTasks(term: string, type: string) {
+    if (type !== "priority" && type !== "type" && type !== "status") {
+      return
+    }
+
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      [type]: term === "" ? [] : term.split(","),
+    }))
   }
 
   return (
-    <div className="space-y-3 p-3">
-      <TasksHeader view={view} setView={setView} searchTasks={searchTasks} />
+    <div className="w-full space-y-3 p-3">
+      <TasksHeader
+        view={view}
+        setView={setView}
+        searchTasks={searchTasks}
+        filterTasks={filterTasks}
+        projectId={projectId}
+      />
       <AppItem
         emptyTitle="No tasks found"
         emptyLabel="task"
@@ -33,15 +88,17 @@ export default function TasksWrapper({
         show={tasks.length > 0}
       >
         <div className="flex w-full flex-1 xl:hidden">
-          <TasksTable tasks={tasks} />
+          <TasksList tasks={tasks} />
         </div>
         <Activity mode={view === "table" ? "visible" : "hidden"}>
           <div className="hidden w-full flex-1 xl:flex">
-            <TasksTable tasks={tasks} />
+            <TasksList tasks={tasks} />
           </div>
         </Activity>
         <Activity mode={view === "board" ? "visible" : "hidden"}>
-          <div className="hidden flex-1 xl:flex">board view</div>
+          <div className="hidden flex-1 xl:flex">
+            <TasksKanban tasks={tasks} projectId={projectId} />
+          </div>
         </Activity>
       </AppItem>
     </div>

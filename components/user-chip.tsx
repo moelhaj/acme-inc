@@ -21,7 +21,7 @@ export default function UserChip({ name, avatar, title }: Props) {
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col">
-        <span>{name}</span>
+        <span className="text-sm">{name}</span>
         {title && (
           <span className="text-[11px] text-muted-foreground">{title}</span>
         )}
